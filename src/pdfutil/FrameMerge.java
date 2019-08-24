@@ -211,7 +211,7 @@ public class FrameMerge extends javax.swing.JFrame {
         if(OSDetector.isWindows()){
              destFile += "\\Desktop\\";
         }else{
-            destFile += "/desktop/";
+            destFile += "/Desktop/";
         }
         destFile += JOptionPane.showInputDialog(this, "Destination file name (without extension):").trim();
         while(destFile.endsWith(".")){
