@@ -33,7 +33,6 @@ public class FrameMain extends javax.swing.JFrame {
                 for (int i = 0; i < files.length; i++) {
                     try {
                         FileType type = FileUtil.getFileType(files[i]);
-                        System.out.println(type.toString());
                         if (type == FileType.PDF_ENCRYPTED || type == FileType.PDF_NOT_ENCRYPTED) {
                             //listModel.addElement(files[i].getCanonicalPath());
                             PDDocument doc;
@@ -113,6 +112,7 @@ public class FrameMain extends javax.swing.JFrame {
         btnMerge = new javax.swing.JButton();
         btnPasswordProtect = new javax.swing.JButton();
         btnDisablePassword = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(200, 200, 200));
@@ -121,6 +121,11 @@ public class FrameMain extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(220, 220, 220));
 
         listFiles.setDragEnabled(true);
+        listFiles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listFilesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(listFiles);
 
         btnUp.setText("Up");
@@ -196,33 +201,41 @@ public class FrameMain extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("PDF Utilities");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnMerge, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnPasswordProtect, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnMerge, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnPasswordProtect, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnPasswordProtect, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                    .addComponent(btnPasswordProtect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnMerge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDisablePassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -264,7 +277,9 @@ public class FrameMain extends javax.swing.JFrame {
 
     private void btnMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMergeActionPerformed
         File files[] = getSelectedFiles();
-        if(files.length == 0) return;
+        if (files.length == 0) {
+            return;
+        }
 
         PDFMergerUtility PDFmerger = new PDFMergerUtility();
         File destFile = FileUtil.addToFileName(files[0], "_merged");
@@ -351,24 +366,68 @@ public class FrameMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPasswordProtectActionPerformed
 
     private void btnDisablePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisablePasswordActionPerformed
-        if (listFiles.getSelectedIndices().length != 1) {
+        if (listFiles.getSelectedIndices().length < 1) {
             return;
         }
-        int index = listFiles.getSelectedIndex();
-        //TODO check if pdf is encrypted
-        File file = fileList.get(index).getFile();
-        String password = JOptionPane.showInputDialog(this, "Password of\n" + file.getAbsolutePath());
-        try {
-            PDDocument doc = PDDocument.load(file, password);
-            doc.setAllSecurityToBeRemoved(true);
-            File newFile = FileUtil.addToFileName(file, "_decrypted");
-            doc.save(newFile);
-        } catch (InvalidPasswordException ipe) {
-            JOptionPane.showMessageDialog(this, "Invalid password.");
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        int indices[] = listFiles.getSelectedIndices();
+        outer:
+        for (int index : indices) {
+            File file = fileList.get(index).getFile();
+            int tries = 3, maxTries = 3;
+            try {
+                PDDocument doc = null;
+                boolean correctPassword = false;
+                inner:
+                do {
+                    try {
+                        if (tries == maxTries) {
+                            try {
+                                doc = PDDocument.load(file);
+                                doc.close();
+                                JOptionPane.showMessageDialog(this, file.getAbsoluteFile() + "\nis not password protected. Proceeding to next file.");
+                                continue outer;
+                            } catch (InvalidPasswordException e) {
+                            }
+                        }
+                        String password = JOptionPane.showInputDialog(this, file.getAbsolutePath() + "\n is secured with a password. Please enter it:");
+                        if (password.equals("")) {
+                            break outer;
+                        }
+                        tries--;
+                        doc = PDDocument.load(file, password);
+
+                        correctPassword = true;
+                        break inner;
+                    } catch (InvalidPasswordException e) {
+                        JOptionPane.showMessageDialog(this, "Invalid password.");
+                    }
+
+                } while (tries > 0);
+
+                if (!correctPassword) {
+                    JOptionPane.showMessageDialog(this, "3 failed password attempts. Proceeding to next file.");
+                    continue outer;
+                }
+
+                doc.setAllSecurityToBeRemoved(true);
+                File newFile = FileUtil.addToFileName(file, "_decrypted");
+                doc.save(newFile);
+                doc.close();
+                JOptionPane.showMessageDialog(this, "Password stripped file saved as\n"+newFile.getAbsolutePath());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_btnDisablePasswordActionPerformed
+
+    private void listFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listFilesMouseClicked
+        if(evt.getClickCount() == 2 && listFiles.getSelectedIndices().length == 1){
+            FrameInfo fi = new FrameInfo(fileList.get(listFiles.getSelectedIndex()).getFile());
+            fi.setVisible(true);
+        }
+    }//GEN-LAST:event_listFilesMouseClicked
 
     private File[] getSelectedFiles() {
         int[] indices = listFiles.getSelectedIndices();
@@ -387,6 +446,7 @@ public class FrameMain extends javax.swing.JFrame {
     private javax.swing.JButton btnMerge;
     private javax.swing.JButton btnPasswordProtect;
     private javax.swing.JButton btnUp;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
