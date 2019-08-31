@@ -32,9 +32,9 @@ public class FrameMain extends javax.swing.JFrame {
             public void filesDropped(java.io.File[] files) {
                 for (int i = 0; i < files.length; i++) {
                     try {
-                        FILE_TYPE type = FileUtil.getFileType(files[i]);
+                        FileType type = FileUtil.getFileType(files[i]);
                         System.out.println(type.toString());
-                        if (type == FILE_TYPE.PDF_ENCRYPTED || type == FILE_TYPE.PDF_NOT_ENCRYPTED) {
+                        if (type == FileType.PDF_ENCRYPTED || type == FileType.PDF_NOT_ENCRYPTED) {
                             //listModel.addElement(files[i].getCanonicalPath());
                             PDDocument doc;
                             boolean encrypted = false;

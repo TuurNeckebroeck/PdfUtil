@@ -30,18 +30,18 @@ public class FileUtil {
         return new File(file.getParentFile().getAbsolutePath() + (OSDetector.isWindows() ? "\\" : "/") + name + "." + getFileExtension(file));
     }
 
-    public static FILE_TYPE getFileType(File file) {
+    public static FileType getFileType(File file) {
         try {
-            if(!file.exists()) return FILE_TYPE.DOES_NOT_EXIST;
-            if(!file.isFile()) return FILE_TYPE.NOT_FILE;
+            if(!file.exists()) return FileType.DOES_NOT_EXIST;
+            if(!file.isFile()) return FileType.NOT_FILE;
             PDDocument doc = PDDocument.load(file);
             
         } catch (InvalidPasswordException e) {
-            return FILE_TYPE.PDF_ENCRYPTED;
+            return FileType.PDF_ENCRYPTED;
         } catch (IOException e){
-            return FILE_TYPE.NOT_PDF;
+            return FileType.NOT_PDF;
         } 
 
-        return FILE_TYPE.PDF_NOT_ENCRYPTED;
+        return FileType.PDF_NOT_ENCRYPTED;
     }
 }
