@@ -1,13 +1,16 @@
 # PdfUtil
 An application that combines pdf tools using an intuitive drag-and-drop interface.
-Currently featuring pdf merging.
 
-## Future features
- - File information (number of pages, size ...)
- - Image extraction
- - Watermarking
+## Current features
+ - Merging
+ - File information (number of pages, size, author, creator, title, subject)
  - Password protection and password stripping
 
+![](pdf_util.png)
+
+## Future features
+- Image extraction
+- Watermarking
 
 
 ## Usage

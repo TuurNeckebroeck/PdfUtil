@@ -187,14 +187,14 @@ public class FrameMain extends javax.swing.JFrame {
             }
         });
 
-        btnPasswordProtect.setText("Password protect");
+        btnPasswordProtect.setText("Password enable");
         btnPasswordProtect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPasswordProtectActionPerformed(evt);
             }
         });
 
-        btnDisablePassword.setText("Disable password");
+        btnDisablePassword.setText("Password disable");
         btnDisablePassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDisablePasswordActionPerformed(evt);

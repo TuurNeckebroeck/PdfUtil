@@ -179,7 +179,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnPasswordProtect">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Password protect"/>
+        <Property name="text" type="java.lang.String" value="Password enable"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPasswordProtectActionPerformed"/>
@@ -187,7 +187,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDisablePassword">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Disable password"/>
+        <Property name="text" type="java.lang.String" value="Password disable"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDisablePasswordActionPerformed"/>
