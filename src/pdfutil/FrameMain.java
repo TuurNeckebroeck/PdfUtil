@@ -28,7 +28,7 @@ public class FrameMain extends javax.swing.JFrame {
         initComponents();
         listFiles.setModel(fileList.getDefaultListModel());
 
-        new FileDrop(System.out, jPanel1, /*dragBorder,*/ new FileDrop.Listener() {
+        new FileDrop(System.out, jPanel1, null, new FileDrop.Listener() {
             public void filesDropped(java.io.File[] files) {
                 for (int i = 0; i < files.length; i++) {
                     try {

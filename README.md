@@ -10,6 +10,7 @@ An application that combines pdf tools using an intuitive drag-and-drop interfac
 
 ## Future features
 - Image extraction
+- Text extraction
 - Watermarking
 
 
