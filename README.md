@@ -1,5 +1,5 @@
 # PdfUtil
-An application that combines pdf tools using an intuitive drag-and-drop interface.
+A java application that combines pdf tools using an intuitive drag-and-drop interface.
 
 ## Current features
  - Merging
@@ -13,6 +13,9 @@ An application that combines pdf tools using an intuitive drag-and-drop interfac
 - Text extraction
 - Watermarking
 
+## Used libraries
+- Apache PDFBox 2.0.16 & preflight 2.0.16 (https://pdfbox.apache.org)
+- FileDrop (http://iharder.sourceforge.net/current/java/filedrop/)
 
 ## Usage
 ```
