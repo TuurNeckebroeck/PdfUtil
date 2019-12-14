@@ -1,2 +1,28 @@
-.idea/
-build/
+# Gradle
+#-------
+.gradle
+/build
+
+# IDEA
+# ----
+*~
+.idea
+.shelf
+/*.iml
+/*.ipr
+/*.iws
+/out
+
+# Eclipse
+# -------
+*.classpath
+*.project
+*.settings
+/bin
+/buildSrc/bin
+/zap/bin
+
+# NetBeans
+# --------
+.nb-gradle
+.nb-gradle-properties
