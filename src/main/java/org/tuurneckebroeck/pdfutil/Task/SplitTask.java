@@ -7,6 +7,9 @@ import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public final class SplitTask extends Task {
 
     /**

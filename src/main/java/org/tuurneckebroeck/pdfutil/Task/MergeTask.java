@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public final class MergeTask extends Task {
 
     public MergeTask(File[] files, File outputFile, CallbackHandler parent) {

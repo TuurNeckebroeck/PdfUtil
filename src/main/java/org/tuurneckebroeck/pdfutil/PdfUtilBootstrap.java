@@ -4,6 +4,9 @@ import org.tuurneckebroeck.pdfutil.Controller.MainController;
 import org.tuurneckebroeck.pdfutil.Model.FileList;
 import org.tuurneckebroeck.pdfutil.View.FrameMain;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public class PdfUtilBootstrap {
 
     public static void main(String[] args) {

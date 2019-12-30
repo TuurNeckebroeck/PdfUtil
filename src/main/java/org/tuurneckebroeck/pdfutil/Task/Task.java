@@ -1,5 +1,8 @@
 package org.tuurneckebroeck.pdfutil.Task;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public abstract class Task implements Runnable{
 
     public Task(CallbackHandler parent) {

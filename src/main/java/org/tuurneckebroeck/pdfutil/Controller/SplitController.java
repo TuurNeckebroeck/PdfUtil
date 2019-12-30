@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public class SplitController {
 
     public SplitController(FrameSplit view, File inputFile) {

@@ -3,6 +3,9 @@ package org.tuurneckebroeck.pdfutil.Model;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public final class FileList extends ArrayList<FileListElement> {
 
     public String[] getDisplayNames() {

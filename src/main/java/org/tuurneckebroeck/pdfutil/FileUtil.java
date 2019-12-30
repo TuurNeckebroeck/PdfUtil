@@ -6,14 +6,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.tuurneckebroeck.pdfutil.Model.FileType;
 
-/**
- * 
- * @author Tuur Neckebroeck
- */
 public final class FileUtil {
 
     /**
-     * author: https://www.journaldev.com/842/java-get-file-extension
+     * @author: https://www.journaldev.com/842/java-get-file-extension
      */
     public static String getFileExtension(File file) {
         String fileName = file.getName();
@@ -54,7 +50,7 @@ public final class FileUtil {
 
     /**
      *
-     * SOURCE: https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+     * @author https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
      *
      */
     public static class OSDetector {

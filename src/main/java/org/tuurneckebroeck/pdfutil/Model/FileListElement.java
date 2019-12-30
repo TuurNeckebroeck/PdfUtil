@@ -2,6 +2,9 @@ package org.tuurneckebroeck.pdfutil.Model;
 
 import java.io.File;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public class FileListElement {
 
     private final File file;

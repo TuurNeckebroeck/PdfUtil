@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Tuur Neckebroeck
+ */
 public class MainController {
 
     private FrameMain view;
