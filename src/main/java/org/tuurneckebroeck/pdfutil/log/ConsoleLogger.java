@@ -1,10 +1,6 @@
 package org.tuurneckebroeck.pdfutil.log;
 
 
-import org.tuurneckebroeck.pdfutil.log.lib.LogLevel;
-import org.tuurneckebroeck.pdfutil.log.lib.VerbosityLogger;
-
-
 /**
  * @author Tuur Neckebroeck
  */

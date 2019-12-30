@@ -1,20 +1,14 @@
 package org.tuurneckebroeck.pdfutil;
 
-import jdk.nashorn.internal.runtime.logging.DebugLogger;
 import org.tuurneckebroeck.pdfutil.controller.MainController;
 import org.tuurneckebroeck.pdfutil.log.CompositeLogger;
 import org.tuurneckebroeck.pdfutil.log.ConsoleLogger;
 import org.tuurneckebroeck.pdfutil.log.FileLogger;
-import org.tuurneckebroeck.pdfutil.log.NullLogger;
-import org.tuurneckebroeck.pdfutil.log.lib.LogLevel;
-import org.tuurneckebroeck.pdfutil.log.lib.VerbosityLogger;
+import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.view.FrameMain;
 
-import java.io.Console;
 import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Tuur Neckebroeck

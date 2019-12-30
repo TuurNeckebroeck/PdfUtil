@@ -1,4 +1,4 @@
-package org.tuurneckebroeck.pdfutil.log.lib;
+package org.tuurneckebroeck.pdfutil.log;
 
 public enum LogLevel {
     NONE, FATAL, ERROR, WARNING, DEBUG;

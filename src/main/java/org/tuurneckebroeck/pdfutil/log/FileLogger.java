@@ -1,8 +1,5 @@
 package org.tuurneckebroeck.pdfutil.log;
 
-import org.tuurneckebroeck.pdfutil.log.lib.LogLevel;
-import org.tuurneckebroeck.pdfutil.log.lib.VerbosityLogger;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;

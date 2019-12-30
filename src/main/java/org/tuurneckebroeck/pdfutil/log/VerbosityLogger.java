@@ -1,4 +1,4 @@
-package org.tuurneckebroeck.pdfutil.log.lib;
+package org.tuurneckebroeck.pdfutil.log;
 
 import java.io.IOException;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
  * The maximum verbosity level to log can be set,
  * so the logger will only log logs with an equal or lower verbosity.
  *
- * The verbosity levels are defined as the enum org.tuurneckebroeck.pdfutil.log.lib.LogLevel
+ * The verbosity levels are defined as the enum org.tuurneckebroeck.pdfutil.log.LogLevel
  *
  */
 public abstract class VerbosityLogger {
