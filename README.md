@@ -24,7 +24,7 @@ Gradle (with the Kotlin DSL) is used as build manager.
 
 
 ## Releases
-Releases can be found at http://neckebroecktuur.ulyssis.org/pdfutil/releases
+Releases can be found at http://neckebroecktuur.ulyssis.be/pdfutil/releases
 
 ## Usage
 Example for release 2.0:
