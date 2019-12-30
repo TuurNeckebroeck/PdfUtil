@@ -1,10 +1,10 @@
-package pdfutil;
+package org.tuurneckebroeck.pdfutil;
 
 import java.io.File;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-import pdfutil.Model.FileType;
+import org.tuurneckebroeck.pdfutil.Model.FileType;
 
 /**
  * 
@@ -94,6 +94,10 @@ public final class FileUtil {
                 destFile += "/Desktop/";
             }
             return destFile;
+        }
+
+        public static String getPathSeparator() {
+            return File.separator;
         }
     }
 }

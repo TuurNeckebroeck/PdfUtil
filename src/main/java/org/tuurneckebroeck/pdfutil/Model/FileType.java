@@ -1,4 +1,4 @@
-package pdfutil.Model;
+package org.tuurneckebroeck.pdfutil.Model;
 
 /**
  *

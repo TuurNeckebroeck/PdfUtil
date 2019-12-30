@@ -1,10 +1,7 @@
-package pdfutil.Model;
-
-import pdfutil.View.FrameMain;
+package org.tuurneckebroeck.pdfutil.Model;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public final class FileList extends ArrayList<FileListElement> {
 

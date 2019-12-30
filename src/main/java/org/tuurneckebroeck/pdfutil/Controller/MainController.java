@@ -1,18 +1,19 @@
-package pdfutil.Controller;
+package org.tuurneckebroeck.pdfutil.Controller;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
-import pdfutil.FileUtil;
-import pdfutil.Model.FileList;
-import pdfutil.Model.FileListElement;
-import pdfutil.Model.FileType;
-import pdfutil.Task.MergeTask;
-import pdfutil.Task.Task;
-import pdfutil.Task.CallbackHandler;
-import pdfutil.View.FrameInfo;
-import pdfutil.View.FrameMain;
+import org.tuurneckebroeck.pdfutil.Model.FileListElement;
+import org.tuurneckebroeck.pdfutil.Model.FileType;
+import org.tuurneckebroeck.pdfutil.FileUtil;
+import org.tuurneckebroeck.pdfutil.Model.FileList;
+import org.tuurneckebroeck.pdfutil.Task.MergeTask;
+import org.tuurneckebroeck.pdfutil.Task.Task;
+import org.tuurneckebroeck.pdfutil.Task.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.View.FrameInfo;
+import org.tuurneckebroeck.pdfutil.View.FrameMain;
+import org.tuurneckebroeck.pdfutil.View.FrameSplit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FrameMainController {
+public class MainController {
 
     private FrameMain view;
     private FileList fileList;
     private final String LOCK_SYMBOL = "\uD83D\uDD12";
 
-    public FrameMainController(FrameMain view, FileList fileList) {
+    public MainController(FrameMain view, FileList fileList) {
         this.view = view;
         view.setController(this);
         this.fileList = fileList;
@@ -90,7 +91,13 @@ public class FrameMainController {
 
         new Thread(mergeTask).start();
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        System.out.println(mergeTask.getStatus());
+        //System.out.println(mergeTask.getStatus());
+    }
+
+    public void splitPdf(int index) {
+        FrameSplit frameSplit = new FrameSplit();
+        SplitController splitController = new SplitController(frameSplit, fileList.get(index).getFile());
+        splitController.showSplitView();
     }
 
     // TODO REFACTOR
@@ -207,6 +214,8 @@ public class FrameMainController {
         FrameInfo fi = new FrameInfo(fileList.get(index).getFile());
         fi.setVisible(true);
     }
+
+    // TODO voeg fct checkView toe analoog aan checkController in FrameMain
 
 
     private File[] indicesToFiles(int[] indices) {

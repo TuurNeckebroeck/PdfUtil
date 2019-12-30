@@ -1,7 +1,10 @@
-package pdfutil.View;
+package org.tuurneckebroeck.pdfutil.View;
 
-import pdfutil.Controller.FrameMainController;
+import org.tuurneckebroeck.pdfutil.Controller.MainController;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -23,7 +26,7 @@ public class FrameMain extends javax.swing.JFrame {
         });
     }
 
-    public void setController(FrameMainController controller) {
+    public void setController(MainController controller) {
         this.controller = controller;
     }
 
@@ -53,6 +56,7 @@ public class FrameMain extends javax.swing.JFrame {
         btnDown = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnMerge = new javax.swing.JButton();
+        btnSplit = new javax.swing.JButton();
         btnPasswordProtect = new javax.swing.JButton();
         btnDisablePassword = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -130,6 +134,14 @@ public class FrameMain extends javax.swing.JFrame {
             }
         });
 
+        btnSplit.setText("Split");
+        btnSplit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                btnSplitActionPerformed(evt);
+            }
+        });
+
         btnPasswordProtect.setText("Password enable");
         btnPasswordProtect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,7 +174,9 @@ public class FrameMain extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnPasswordProtect, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSplit, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -178,7 +192,8 @@ public class FrameMain extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnPasswordProtect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnMerge, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDisablePassword, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSplit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -223,6 +238,13 @@ public class FrameMain extends javax.swing.JFrame {
         controller.mergePdfs(indices);
     }
 
+    private void btnSplitActionPerformed(java.awt.event.ActionEvent evt) {
+        checkController();
+        int index = listFiles.getSelectedIndex();
+        if(index == -1) return;
+        controller.splitPdf(index);
+    }
+
     private void btnPasswordProtectActionPerformed(java.awt.event.ActionEvent evt) {
         checkController();
         int[] indices = listFiles.getSelectedIndices();
@@ -257,13 +279,14 @@ public class FrameMain extends javax.swing.JFrame {
     }
 
 
-    private FrameMainController controller;
+    private MainController controller;
 
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDisablePassword;
     private javax.swing.JButton btnDown;
     private javax.swing.JButton btnMerge;
     private javax.swing.JButton btnPasswordProtect;
+    private javax.swing.JButton btnSplit;
     private javax.swing.JButton btnUp;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

@@ -1,4 +1,4 @@
-package pdfutil.Task;
+package org.tuurneckebroeck.pdfutil.Task;
 
 public interface CallbackHandler {
 

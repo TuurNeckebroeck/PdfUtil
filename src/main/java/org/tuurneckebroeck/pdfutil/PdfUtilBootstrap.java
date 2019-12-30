@@ -1,8 +1,8 @@
-package pdfutil;
+package org.tuurneckebroeck.pdfutil;
 
-import pdfutil.Controller.FrameMainController;
-import pdfutil.Model.FileList;
-import pdfutil.View.FrameMain;
+import org.tuurneckebroeck.pdfutil.Controller.MainController;
+import org.tuurneckebroeck.pdfutil.Model.FileList;
+import org.tuurneckebroeck.pdfutil.View.FrameMain;
 
 public class PdfUtilBootstrap {
 
@@ -42,7 +42,7 @@ public class PdfUtilBootstrap {
         FrameMain view = new FrameMain();
         FileList fileListModel = new FileList();
 
-        FrameMainController mainController = new FrameMainController(view, fileListModel);
+        MainController mainController = new MainController(view, fileListModel);
 
         view.setVisible(true);
     }
