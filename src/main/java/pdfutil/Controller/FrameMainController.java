@@ -13,6 +13,7 @@ import pdfutil.Task.Task;
 import pdfutil.Task.CallbackHandler;
 import pdfutil.View.FrameInfo;
 import pdfutil.View.FrameMain;
+import pdfutil.View.FrameSplit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -91,6 +92,11 @@ public class FrameMainController {
         new Thread(mergeTask).start();
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         System.out.println(mergeTask.getStatus());
+    }
+
+    public void splitPdf(int index) {
+        JFrame frameSplit = new FrameSplit(fileList.get(index).getFile());
+        frameSplit.setVisible(true);
     }
 
     // TODO REFACTOR
