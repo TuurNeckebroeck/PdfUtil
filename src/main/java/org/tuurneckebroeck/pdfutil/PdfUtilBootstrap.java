@@ -2,7 +2,7 @@ package org.tuurneckebroeck.pdfutil;
 
 import org.tuurneckebroeck.pdfutil.controller.MainController;
 import org.tuurneckebroeck.pdfutil.model.FileList;
-import org.tuurneckebroeck.pdfutil.View.FrameMain;
+import org.tuurneckebroeck.pdfutil.view.FrameMain;
 
 /**
  * @author Tuur Neckebroeck

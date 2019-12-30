@@ -1,4 +1,4 @@
-package org.tuurneckebroeck.pdfutil.View;
+package org.tuurneckebroeck.pdfutil.view;
 
 import org.tuurneckebroeck.pdfutil.controller.SplitController;
 

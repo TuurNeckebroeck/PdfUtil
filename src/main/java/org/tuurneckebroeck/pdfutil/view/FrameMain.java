@@ -1,6 +1,7 @@
-package org.tuurneckebroeck.pdfutil.View;
+package org.tuurneckebroeck.pdfutil.view;
 
 import org.tuurneckebroeck.pdfutil.controller.MainController;
+import org.tuurneckebroeck.pdfutil.view.lib.FileDrop;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

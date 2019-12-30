@@ -1,4 +1,4 @@
-package org.tuurneckebroeck.pdfutil.View;
+package org.tuurneckebroeck.pdfutil.view;
 
 import java.io.File;
 import java.io.IOException;

@@ -11,9 +11,9 @@ import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.task.MergeTask;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.CallbackHandler;
-import org.tuurneckebroeck.pdfutil.View.FrameInfo;
-import org.tuurneckebroeck.pdfutil.View.FrameMain;
-import org.tuurneckebroeck.pdfutil.View.FrameSplit;
+import org.tuurneckebroeck.pdfutil.view.FrameInfo;
+import org.tuurneckebroeck.pdfutil.view.FrameMain;
+import org.tuurneckebroeck.pdfutil.view.FrameSplit;
 
 import javax.swing.*;
 import java.awt.*;

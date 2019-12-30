@@ -1,4 +1,4 @@
-package org.tuurneckebroeck.pdfutil.view;
+package org.tuurneckebroeck.pdfutil.view.lib;
 
 
 import java.awt.datatransfer.DataFlavor;

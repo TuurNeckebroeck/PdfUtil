@@ -2,7 +2,7 @@ package org.tuurneckebroeck.pdfutil.controller;
 
 import org.tuurneckebroeck.pdfutil.task.lib.CallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.SplitTask;
-import org.tuurneckebroeck.pdfutil.View.FrameSplit;
+import org.tuurneckebroeck.pdfutil.view.FrameSplit;
 import org.tuurneckebroeck.pdfutil.FileUtil;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
