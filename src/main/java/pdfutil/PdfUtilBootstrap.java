@@ -1,6 +1,6 @@
 package pdfutil;
 
-import pdfutil.Controller.FrameMainController;
+import pdfutil.Controller.MainController;
 import pdfutil.Model.FileList;
 import pdfutil.View.FrameMain;
 
@@ -42,7 +42,7 @@ public class PdfUtilBootstrap {
         FrameMain view = new FrameMain();
         FileList fileListModel = new FileList();
 
-        FrameMainController mainController = new FrameMainController(view, fileListModel);
+        MainController mainController = new MainController(view, fileListModel);
 
         view.setVisible(true);
     }

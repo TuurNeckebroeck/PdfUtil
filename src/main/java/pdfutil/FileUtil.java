@@ -95,5 +95,9 @@ public final class FileUtil {
             }
             return destFile;
         }
+
+        public static String getPathSeparator() {
+            return File.separator;
+        }
     }
 }

@@ -1,6 +1,6 @@
 package pdfutil.View;
 
-import pdfutil.Controller.FrameMainController;
+import pdfutil.Controller.MainController;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,7 +25,7 @@ public class FrameMain extends javax.swing.JFrame {
         });
     }
 
-    public void setController(FrameMainController controller) {
+    public void setController(MainController controller) {
         this.controller = controller;
     }
 
@@ -239,7 +239,9 @@ public class FrameMain extends javax.swing.JFrame {
 
     private void btnSplitActionPerformed(java.awt.event.ActionEvent evt) {
         checkController();
-        controller.splitPdf(listFiles.getSelectedIndex());
+        int index = listFiles.getSelectedIndex();
+        if(index == -1) return;
+        controller.splitPdf(index);
     }
 
     private void btnPasswordProtectActionPerformed(java.awt.event.ActionEvent evt) {
@@ -276,7 +278,7 @@ public class FrameMain extends javax.swing.JFrame {
     }
 
 
-    private FrameMainController controller;
+    private MainController controller;
 
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDisablePassword;

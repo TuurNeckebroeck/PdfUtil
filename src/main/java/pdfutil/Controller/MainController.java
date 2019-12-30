@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FrameMainController {
+public class MainController {
 
     private FrameMain view;
     private FileList fileList;
     private final String LOCK_SYMBOL = "\uD83D\uDD12";
 
-    public FrameMainController(FrameMain view, FileList fileList) {
+    public MainController(FrameMain view, FileList fileList) {
         this.view = view;
         view.setController(this);
         this.fileList = fileList;
@@ -91,12 +91,13 @@ public class FrameMainController {
 
         new Thread(mergeTask).start();
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        System.out.println(mergeTask.getStatus());
+        //System.out.println(mergeTask.getStatus());
     }
 
     public void splitPdf(int index) {
-        JFrame frameSplit = new FrameSplit(fileList.get(index).getFile());
-        frameSplit.setVisible(true);
+        FrameSplit frameSplit = new FrameSplit();
+        SplitController splitController = new SplitController(frameSplit, fileList.get(index).getFile());
+        splitController.showSplitView();
     }
 
     // TODO REFACTOR
@@ -213,6 +214,8 @@ public class FrameMainController {
         FrameInfo fi = new FrameInfo(fileList.get(index).getFile());
         fi.setVisible(true);
     }
+
+    // TODO voeg fct checkView toe analoog aan checkController in FrameMain
 
 
     private File[] indicesToFiles(int[] indices) {
