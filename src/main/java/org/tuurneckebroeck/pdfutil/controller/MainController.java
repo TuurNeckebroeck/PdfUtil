@@ -162,6 +162,8 @@ public class MainController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            e.printStackTrace();
+            logger.log(LogLevel.ERROR, getClass(), "Not all files could be encrypted:\n" + FileUtil.getExceptionStackTrace(e));
             JOptionPane.showMessageDialog(view, "An error occured, not all files have been encrypted.");
         } finally {
             StringBuilder sb = new StringBuilder();

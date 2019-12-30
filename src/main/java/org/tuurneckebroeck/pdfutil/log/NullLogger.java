@@ -11,14 +11,11 @@ import org.tuurneckebroeck.pdfutil.log.lib.VerbosityLogger;
  *
  */
 public class NullLogger extends VerbosityLogger {
+
     public NullLogger() {
         super(LogLevel.NONE);
     }
-
-    public NullLogger(LogLevel verbosityLevel) {
-        super(verbosityLevel);
-    }
-
+    
     @Override
     protected void logAll(LogLevel level, Class<?> parent, String content) {}
 

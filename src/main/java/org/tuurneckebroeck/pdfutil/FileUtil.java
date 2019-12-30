@@ -2,6 +2,9 @@ package org.tuurneckebroeck.pdfutil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.tuurneckebroeck.pdfutil.model.FileType;
@@ -46,6 +49,15 @@ public final class FileUtil {
         }
 
         return FileType.PDF_NOT_ENCRYPTED;
+    }
+
+    // TODO verplaatsen naar andere util klasse
+    public static String getExceptionStackTrace(Exception e) {
+        StringWriter w = new StringWriter();
+        PrintWriter p = new PrintWriter(w);
+        e.printStackTrace(p);
+        p.close();
+        return w.toString();
     }
 
     /**

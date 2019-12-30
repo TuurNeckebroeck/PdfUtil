@@ -7,6 +7,14 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * CompositeLogger is a VerbosityLogger which can contain multiple VerbosityLogger's,
+ * each with their own verbosities.
+ * The default verbosity level of the CompositeLogger is the highest (weakest) possible,
+ * so by default, all logs will be passed to the subloggers.
+ *
+ * @author Tuur Neckebroeck
+ */
 public class CompositeLogger extends VerbosityLogger {
 
 
@@ -14,7 +22,7 @@ public class CompositeLogger extends VerbosityLogger {
         super(LogLevel.DEBUG);
     }
 
-    private CompositeLogger(LogLevel verbosityLevel) {
+    public CompositeLogger(LogLevel verbosityLevel) {
         super(verbosityLevel);
     }
 
@@ -26,8 +34,6 @@ public class CompositeLogger extends VerbosityLogger {
         loggers.remove(logger);
     }
 
-
-
     @Override
     protected void logAll(LogLevel level, Class<?> parent, String content) {
         loggers.forEach(logger -> logger.log(level, parent, content));
@@ -35,16 +41,16 @@ public class CompositeLogger extends VerbosityLogger {
 
     @Override
     public void tearDown() throws IOException {
-        boolean exceptionOccured = false;
+        boolean exceptionOccurred = false;
         for(VerbosityLogger logger : loggers) {
             try{
                 logger.tearDown();
             }catch (IOException e) {
-                exceptionOccured = true;
+                exceptionOccurred = true;
             }
         }
 
-        if(exceptionOccured) throw new IOException("Exception occured in composite logger teardown.");
+        if(exceptionOccurred) throw new IOException("Exception occurred in composite logger teardown.");
     }
 
     private List<VerbosityLogger> loggers = new LinkedList<>();
