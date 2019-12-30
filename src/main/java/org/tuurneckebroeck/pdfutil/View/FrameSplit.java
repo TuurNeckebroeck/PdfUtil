@@ -1,6 +1,6 @@
 package org.tuurneckebroeck.pdfutil.View;
 
-import org.tuurneckebroeck.pdfutil.Controller.SplitController;
+import org.tuurneckebroeck.pdfutil.controller.SplitController;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

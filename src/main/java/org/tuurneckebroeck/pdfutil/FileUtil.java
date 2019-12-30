@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-import org.tuurneckebroeck.pdfutil.Model.FileType;
+import org.tuurneckebroeck.pdfutil.model.FileType;
 
 public final class FileUtil {
 

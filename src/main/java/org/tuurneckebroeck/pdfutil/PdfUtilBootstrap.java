@@ -1,7 +1,7 @@
 package org.tuurneckebroeck.pdfutil;
 
-import org.tuurneckebroeck.pdfutil.Controller.MainController;
-import org.tuurneckebroeck.pdfutil.Model.FileList;
+import org.tuurneckebroeck.pdfutil.controller.MainController;
+import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.View.FrameMain;
 
 /**

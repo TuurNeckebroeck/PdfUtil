@@ -9,8 +9,9 @@ repositories {
 }
 
 dependencies {
-    compile(fileTree(mapOf("dir" to "libs", "include" to  "*.jar")))
-
+    //compile(fileTree(mapOf("dir" to "libs", "include" to  "*.jar")))
+    implementation("org.apache.pdfbox:pdfbox:2.0.16")
+    implementation("org.apache.pdfbox:preflight:2.0.16")
     testCompile("junit", "junit", "4.12")
 }
 
