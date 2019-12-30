@@ -23,19 +23,19 @@ public class SplitController {
     }
 
     private void initView() {
-        //checkView();
+        checkView();
         view.setController(this);
         //view.setTitle...
     }
 
     public void showSplitView(){
-        //checkView();
+        checkView();
         view.setVisible(true);
     }
 
 
     public void splitAfterPage(int page) {
-        //checkView();
+        checkView();
         // TODO aanpassen
         String parent = inputFile.toPath().getParent().toString();
         File firstOutputFile = new File(parent + FileUtil.OSDetector.getPathSeparator() + "splitted_1.pdf");
@@ -58,9 +58,11 @@ public class SplitController {
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
-    // TODO voeg fct checkView toe analoog aan checkController in FrameSplit
-
-
+    private void checkView() {
+        if (view == null) {
+            throw new IllegalStateException("The FrameSplit view of this controller should not be null.");
+        }
+    }
 
     private FrameSplit view;
     private File inputFile;

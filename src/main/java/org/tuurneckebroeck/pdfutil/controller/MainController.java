@@ -37,7 +37,13 @@ public class MainController {
         this.fileList = fileList;
     }
 
+    public void showMainView() {
+        checkView();
+        view.setVisible(true);
+    }
+
     public void addDroppedFiles(File[] files) {
+        checkView();
         for (File file : files) {
             FileType type = FileUtil.getFileType(file);
             if (type.isPdf()) {
@@ -54,18 +60,22 @@ public class MainController {
     }
 
     public void moveUpElement(int index) {
+        checkView();
         fileList.moveUp(index);
         view.setFileListModel(fileList.getDefaultListModel());
         view.setSelectedFileIndex(index-1);
     }
 
     public void moveDownElement(int index) {
+        checkView();
         fileList.moveDown(index);
         view.setFileListModel(fileList.getDefaultListModel());
         view.setSelectedFileIndex(index + 1);
     }
 
     public void deleteElementsFromGui(int[] indices) {
+        checkView();
+
         Arrays.sort(indices);
         for (int i = indices.length - 1; i >= 0; i--) {
             fileList.remove(indices[i]);
@@ -74,6 +84,8 @@ public class MainController {
     }
 
     public void mergePdfs(int[] indices) {
+        checkView();
+
         File[] files = indicesToFiles(indices);
         File destFile = FileUtil.addToFileName(files[0], "_merged");
 
@@ -86,7 +98,7 @@ public class MainController {
                     fileList.clear();
                     view.setFileListModel(fileList.getDefaultListModel());
                 } else if (status == Task.TaskStatus.FAILED) {
-                    // TODO mogelijkheid voorzien om bv. errormessage mee te geven.
+                    // DESIGN mogelijkheid voorzien om bv. errormessage mee te geven.
                     JOptionPane.showMessageDialog(view, "Merge failed.");
                 }
             }
@@ -94,17 +106,19 @@ public class MainController {
 
         new Thread(mergeTask).start();
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        //System.out.println(mergeTask.getStatus());
     }
 
     public void splitPdf(int index) {
-        FrameSplit frameSplit = new FrameSplit();
-        SplitController splitController = new SplitController(frameSplit, fileList.get(index).getFile());
+        checkView();
+
+        SplitController splitController = new SplitController(new FrameSplit(), fileList.get(index).getFile());
         splitController.showSplitView();
     }
 
     // TODO REFACTOR
     public void addPasswordProtection(int[] indices, String password) {
+        checkView();
+
         List<File> encryptedFiles = new ArrayList<>();
         int nbSelectedFiles = indices.length;
 
@@ -162,6 +176,8 @@ public class MainController {
 
     // TODO REFACTOR
     public void disablePasswordProtection(int[] indices) {
+        checkView();
+
         outer:
         for (int index : indices) {
             File file = fileList.get(index).getFile();
@@ -214,11 +230,17 @@ public class MainController {
     }
 
     public void showInfoFrame(int index) {
+        checkView();
+
         FrameInfo fi = new FrameInfo(fileList.get(index).getFile());
         fi.setVisible(true);
     }
 
-    // TODO voeg fct checkView toe analoog aan checkController in FrameMain
+    private void checkView() {
+        if (view == null) {
+            throw new IllegalStateException("The FrameMain view of this controller should not be null.");
+        }
+    }
 
 
     private File[] indicesToFiles(int[] indices) {

@@ -42,11 +42,7 @@ public class PdfUtilBootstrap {
     }
 
     private static void init() {
-        FrameMain view = new FrameMain();
-        FileList fileListModel = new FileList();
-
-        MainController mainController = new MainController(view, fileListModel);
-
-        view.setVisible(true);
+        MainController mainController = new MainController(new FrameMain(), new FileList());
+        mainController.showMainView();
     }
 }
