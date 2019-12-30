@@ -23,7 +23,7 @@ Gradle (with the Kotlin DSL) is used as build manager.
 - FileDrop (http://iharder.sourceforge.net/current/java/filedrop/)
 
 
-##Releases
+## Releases
 Releases can be found at http://neckebroecktuur.ulyssis.org/pdfutil/releases
 
 ## Usage
