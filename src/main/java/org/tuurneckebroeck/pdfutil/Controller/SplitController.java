@@ -1,10 +1,10 @@
-package pdfutil.Controller;
+package org.tuurneckebroeck.pdfutil.Controller;
 
-import pdfutil.FileUtil;
-import pdfutil.Task.CallbackHandler;
-import pdfutil.Task.SplitTask;
-import pdfutil.Task.Task;
-import pdfutil.View.FrameSplit;
+import org.tuurneckebroeck.pdfutil.Task.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.Task.SplitTask;
+import org.tuurneckebroeck.pdfutil.View.FrameSplit;
+import org.tuurneckebroeck.pdfutil.FileUtil;
+import org.tuurneckebroeck.pdfutil.Task.Task;
 
 import javax.swing.*;
 import java.awt.*;

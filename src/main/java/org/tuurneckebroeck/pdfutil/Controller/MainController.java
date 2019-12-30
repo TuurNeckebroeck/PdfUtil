@@ -1,19 +1,19 @@
-package pdfutil.Controller;
+package org.tuurneckebroeck.pdfutil.Controller;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
-import pdfutil.FileUtil;
-import pdfutil.Model.FileList;
-import pdfutil.Model.FileListElement;
-import pdfutil.Model.FileType;
-import pdfutil.Task.MergeTask;
-import pdfutil.Task.Task;
-import pdfutil.Task.CallbackHandler;
-import pdfutil.View.FrameInfo;
-import pdfutil.View.FrameMain;
-import pdfutil.View.FrameSplit;
+import org.tuurneckebroeck.pdfutil.Model.FileListElement;
+import org.tuurneckebroeck.pdfutil.Model.FileType;
+import org.tuurneckebroeck.pdfutil.FileUtil;
+import org.tuurneckebroeck.pdfutil.Model.FileList;
+import org.tuurneckebroeck.pdfutil.Task.MergeTask;
+import org.tuurneckebroeck.pdfutil.Task.Task;
+import org.tuurneckebroeck.pdfutil.Task.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.View.FrameInfo;
+import org.tuurneckebroeck.pdfutil.View.FrameMain;
+import org.tuurneckebroeck.pdfutil.View.FrameSplit;
 
 import javax.swing.*;
 import java.awt.*;

@@ -17,3 +17,16 @@ dependencies {
 configure<JavaPluginConvention> {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
+
+tasks.jar {
+    manifest {
+        attributes(mapOf("Main-Class" to "org.tuurneckebroeck.pdfutil.PdfUtilBootstrap"))
+    }
+
+    // Voeg dependencies toe
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
+
+    // FIXME Classfiles worden 2 keer gepackaged!
+}

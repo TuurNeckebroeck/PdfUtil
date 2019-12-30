@@ -1,8 +1,8 @@
-package pdfutil;
+package org.tuurneckebroeck.pdfutil;
 
-import pdfutil.Controller.MainController;
-import pdfutil.Model.FileList;
-import pdfutil.View.FrameMain;
+import org.tuurneckebroeck.pdfutil.Controller.MainController;
+import org.tuurneckebroeck.pdfutil.Model.FileList;
+import org.tuurneckebroeck.pdfutil.View.FrameMain;
 
 public class PdfUtilBootstrap {
 

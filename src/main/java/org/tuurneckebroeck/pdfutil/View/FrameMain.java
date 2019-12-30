@@ -1,6 +1,7 @@
-package pdfutil.View;
+package org.tuurneckebroeck.pdfutil.View;
 
-import pdfutil.Controller.MainController;
+import org.tuurneckebroeck.pdfutil.Controller.MainController;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

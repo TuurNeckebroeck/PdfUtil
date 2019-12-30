@@ -1,4 +1,4 @@
-package pdfutil.Task;
+package org.tuurneckebroeck.pdfutil.Task;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;

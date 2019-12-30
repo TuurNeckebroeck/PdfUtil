@@ -1,4 +1,4 @@
-package pdfutil.Task;
+package org.tuurneckebroeck.pdfutil.Task;
 
 public abstract class Task implements Runnable{
 
