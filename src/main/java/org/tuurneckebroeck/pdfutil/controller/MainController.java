@@ -4,6 +4,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import org.tuurneckebroeck.pdfutil.log.NullLogger;
+import org.tuurneckebroeck.pdfutil.log.lib.LogLevel;
+import org.tuurneckebroeck.pdfutil.log.lib.VerbosityLogger;
 import org.tuurneckebroeck.pdfutil.model.FileListElement;
 import org.tuurneckebroeck.pdfutil.model.FileType;
 import org.tuurneckebroeck.pdfutil.FileUtil;
@@ -30,11 +33,17 @@ public class MainController {
     private FrameMain view;
     private FileList fileList;
     private final String LOCK_SYMBOL = "\uD83D\uDD12";
+    private VerbosityLogger logger = new NullLogger();
 
     public MainController(FrameMain view, FileList fileList) {
+        logger.log(LogLevel.DEBUG, getClass(), "MainController::MainController");
         this.view = view;
         view.setController(this);
         this.fileList = fileList;
+    }
+
+    public void setLogger(VerbosityLogger logger) {
+        this.logger = logger;
     }
 
     public void showMainView() {
@@ -43,6 +52,7 @@ public class MainController {
     }
 
     public void addDroppedFiles(File[] files) {
+        logger.log(LogLevel.DEBUG, getClass(), "MainController::addDroppedFiles");
         checkView();
         for (File file : files) {
             FileType type = FileUtil.getFileType(file);
@@ -99,6 +109,7 @@ public class MainController {
                     view.setFileListModel(fileList.getDefaultListModel());
                 } else if (status == Task.TaskStatus.FAILED) {
                     // DESIGN mogelijkheid voorzien om bv. errormessage mee te geven.
+                    logger.log(LogLevel.ERROR, getClass(), "MergeTask returned FAILED task status on callback.");
                     JOptionPane.showMessageDialog(view, "Merge failed.");
                 }
             }
@@ -123,16 +134,13 @@ public class MainController {
         int nbSelectedFiles = indices.length;
 
         try {
-            File files[] = new File[indices.length];
-            for (int i = 0; i < indices.length; i++) {
-                files[i] = fileList.get(indices[i]).getFile();
-            }
+            File files[] = indicesToFiles(indices);
 
             for (File file : files) {
                 PDDocument doc = PDDocument.load(file);
 
-// Define the length of the encryption key.
-// Possible values are 40 or 128 (256 will be available in PDFBox 2.0).
+                // Define the length of the encryption key.
+                // Possible values are 40 or 128 (256 will be available in PDFBox 2.0).
                 int keyLength = 128;
 
                 AccessPermission ap = new AccessPermission();

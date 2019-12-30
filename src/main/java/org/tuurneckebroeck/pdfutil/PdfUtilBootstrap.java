@@ -1,8 +1,20 @@
 package org.tuurneckebroeck.pdfutil;
 
+import jdk.nashorn.internal.runtime.logging.DebugLogger;
 import org.tuurneckebroeck.pdfutil.controller.MainController;
+import org.tuurneckebroeck.pdfutil.log.CompositeLogger;
+import org.tuurneckebroeck.pdfutil.log.ConsoleLogger;
+import org.tuurneckebroeck.pdfutil.log.FileLogger;
+import org.tuurneckebroeck.pdfutil.log.NullLogger;
+import org.tuurneckebroeck.pdfutil.log.lib.LogLevel;
+import org.tuurneckebroeck.pdfutil.log.lib.VerbosityLogger;
 import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.view.FrameMain;
+
+import java.io.Console;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Tuur Neckebroeck
@@ -42,7 +54,21 @@ public class PdfUtilBootstrap {
     }
 
     private static void init() {
-        MainController mainController = new MainController(new FrameMain(), new FileList());
-        mainController.showMainView();
+        try {
+            CompositeLogger compositeLogger = new CompositeLogger();
+            compositeLogger.registerLogger(new FileLogger(
+                    LogLevel.ERROR,
+                    new File(FileUtil.OSDetector.getDesktopPath()
+                            + FileUtil.OSDetector.getPathSeparator() + "log.txt"),
+                    true));
+            compositeLogger.registerLogger(new ConsoleLogger(LogLevel.DEBUG));
+
+            MainController mainController = new MainController(new FrameMain(), new FileList());
+            mainController.setLogger(compositeLogger);
+            mainController.showMainView();
+        } catch (Exception e) {
+            //Logger.getLogger("BOOTSTRAP").log(Level.SEVERE, "UNCATCHED EXCEPTION OCCURED");
+            e.printStackTrace();
+        }
     }
 }
