@@ -8,20 +8,6 @@ import java.util.List;
 
 public final class FileList extends ArrayList<FileListElement> {
 
-//    private List<FileListElement> fileList = new ArrayList<>();
-//
-//    public void addElement(FileListElement fle) {
-//        fileList.add(fle);
-//    }
-//
-//    public void removeElement(int index) {
-//        this.fileList.remove(index);
-//    }
-//
-//    public int getSize() {
-//        return this.fileList.size();
-//    }
-
     public String[] getDisplayNames() {
         String[] displayNames = new String[size()];
         for (int i = 0; i < size(); i++) {
@@ -64,13 +50,6 @@ public final class FileList extends ArrayList<FileListElement> {
             model.addElement(el.getDisplayText());
         }
         return model;
-    }
-
-    public void clear() {
-        for (int i = 0; i < size(); i++) {
-            //removeElement(0);
-            remove(0);
-        }
     }
 
 }
