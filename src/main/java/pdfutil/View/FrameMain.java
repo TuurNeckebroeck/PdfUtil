@@ -1,17 +1,21 @@
-package pdfutil;
+package pdfutil.View;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import pdfutil.Controller.FrameMainController;
+import pdfutil.Model.FileList;
+import pdfutil.Model.FileListElement;
+import pdfutil.Model.FileType;
+import pdfutil.FileUtil;
 
 /**
  *
@@ -19,78 +23,23 @@ import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
  */
 public class FrameMain extends javax.swing.JFrame {
 
-    private FileList fileList = new FileList();
-
     /**
      * Creates new form FrameMerge
      */
     public FrameMain() {
         initComponents();
-        listFiles.setModel(fileList.getDefaultListModel());
+        //listFiles.setModel(fileList.getDefaultListModel());
 
         new FileDrop(System.out, jPanel1, null, new FileDrop.Listener() {
             public void filesDropped(java.io.File[] files) {
-                for (int i = 0; i < files.length; i++) {
-                    try {
-                        FileType type = FileUtil.getFileType(files[i]);
-                        if (type == FileType.PDF_ENCRYPTED || type == FileType.PDF_NOT_ENCRYPTED) {
-                            //listModel.addElement(files[i].getCanonicalPath());
-                            PDDocument doc;
-                            boolean encrypted = false;
-                            try {
-                                doc = PDDocument.load(files[i]);
-                                doc.close(); //als de pdf niet password protected is, wordt hij wel geladen en moet hij dus gesloten worden.
-                            } catch (InvalidPasswordException e) {
-                                encrypted = true;
-                            }
-
-                            //listModel.addElement(files[i].getCanonicalPath() + (encrypted ? " \uD83D\uDD12 " : ""));
-                            FileListElement fle = new FileListElement(files[i]);
-                            if (encrypted) {
-                                fle.appendToDisplayText(" \uD83D\uDD12 ");
-                            }
-                            fileList.addElement(fle);
-                            listFiles.setModel(fileList.getDefaultListModel());
-                        }
-                    } // end try
-                    catch (java.io.IOException e) {
-                        e.printStackTrace();
-                    }
-                }   // end for: through each dropped file
-            }   // end filesDropped
-        }); // end FileDrop.Listener
-    }
-
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrameMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrameMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrameMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrameMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrameMain().setVisible(true);
+                controller.addDroppedFiles(files);
             }
         });
+    }
+
+
+    public void setController(FrameMainController controller) {
+        this.controller = controller;
     }
 
     /**
@@ -240,78 +189,47 @@ public class FrameMain extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void btnUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpActionPerformed
+
+    private void btnUpActionPerformed(java.awt.event.ActionEvent evt) {
         if (listFiles.getSelectedIndices().length == 1) {
             int index = listFiles.getSelectedIndex();
             if (index == 0) {
                 return;
             }
-            fileList.moveUp(index);
-            listFiles.setModel(fileList.getDefaultListModel());
-            listFiles.setSelectedIndex(index - 1);
+            controller.moveUpElement(index);
         }
-    }//GEN-LAST:event_btnUpActionPerformed
+    }
 
-    private void btnDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownActionPerformed
+    private void btnDownActionPerformed(java.awt.event.ActionEvent evt) {
         if (listFiles.getSelectedIndices().length == 1) {
             int index = listFiles.getSelectedIndex();
             if (index == listFiles.getModel().getSize() - 1) {
                 return;
             }
 
-            fileList.moveDown(index);
-            listFiles.setModel(fileList.getDefaultListModel());
-            listFiles.setSelectedIndex(index + 1);
+            controller.moveDownElement(index);
         }
-    }//GEN-LAST:event_btnDownActionPerformed
+    }
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
         int indices[] = listFiles.getSelectedIndices();
-        for (int i = indices.length - 1; i >= 0; i--) {
-            fileList.removeElement(indices[i]);
-        }
-        listFiles.setModel(fileList.getDefaultListModel());
-    }//GEN-LAST:event_btnDeleteActionPerformed
+        controller.deleteElements(indices);
+    }
 
-    private void btnMergeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMergeActionPerformed
-        File files[] = getSelectedFiles();
-        if (files.length == 0) {
-            return;
-        }
+    private void btnMergeActionPerformed(java.awt.event.ActionEvent evt) {
+        int[] indices = listFiles.getSelectedIndices();
+        if (indices.length == 0) return;
 
-        PDFMergerUtility PDFmerger = new PDFMergerUtility();
-        File destFile = FileUtil.addToFileName(files[0], "_merged");
+        controller.mergePdfs(indices);
+    }
 
-        PDFmerger.setDestinationFileName(destFile.getAbsolutePath());
-        List<PDDocument> docs = new ArrayList<>();
-
-        try {
-            for (File f : files) {
-                PDDocument p = PDDocument.load(f);
-                docs.add(p);
-                PDFmerger.addSource(f);
-            }
-            PDFmerger.mergeDocuments();
-            for (PDDocument p : docs) {
-                p.close();
-            }
-
-            JOptionPane.showMessageDialog(this, "File saved as " + destFile);
-            fileList.clear();
-            listFiles.setModel(new DefaultListModel());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }//GEN-LAST:event_btnMergeActionPerformed
-
-    private void btnPasswordProtectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasswordProtectActionPerformed
+    private void btnPasswordProtectActionPerformed(java.awt.event.ActionEvent evt) {
         List<File> encryptedFiles = new ArrayList<>();
         int[] indices = listFiles.getSelectedIndices();
         int nbSelectedFiles = indices.length;
-        String password = JOptionPane.showInputDialog(this, "Pasword:");
+        String password = JOptionPane.showInputDialog(this, "Password:");
 
         try {
             File files[] = new File[indices.length];
@@ -363,9 +281,9 @@ public class FrameMain extends javax.swing.JFrame {
             }
             JOptionPane.showMessageDialog(this, sb.toString());
         }
-    }//GEN-LAST:event_btnPasswordProtectActionPerformed
+    }
 
-    private void btnDisablePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisablePasswordActionPerformed
+    private void btnDisablePasswordActionPerformed(java.awt.event.ActionEvent evt) {
         if (listFiles.getSelectedIndices().length < 1) {
             return;
         }
@@ -420,24 +338,25 @@ public class FrameMain extends javax.swing.JFrame {
                 e.printStackTrace();
             }
         }
-    }//GEN-LAST:event_btnDisablePasswordActionPerformed
+    }
 
-    private void listFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listFilesMouseClicked
+    private void listFilesMouseClicked(java.awt.event.MouseEvent evt) {
         if(evt.getClickCount() == 2 && listFiles.getSelectedIndices().length == 1){
             FrameInfo fi = new FrameInfo(fileList.get(listFiles.getSelectedIndex()).getFile());
             fi.setVisible(true);
         }
-    }//GEN-LAST:event_listFilesMouseClicked
-
-    private File[] getSelectedFiles() {
-        int[] indices = listFiles.getSelectedIndices();
-        File files[] = new File[indices.length];
-        for (int i = 0; i < indices.length; i++) {
-            files[i] = fileList.get(indices[i]).getFile();
-        }
-        return files;
     }
 
+    public void setFileListModel(ListModel<String> model) {
+        listFiles.setModel(model);
+    }
+
+    public void setSelectedFileIndex(int index) {
+        listFiles.setSelectedIndex(index);
+    }
+
+
+    private FrameMainController controller;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
@@ -452,103 +371,4 @@ public class FrameMain extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JList<String> listFiles;
     // End of variables declaration//GEN-END:variables
-
-    private final class FileList {
-
-        private List<FileListElement> fileList = new ArrayList<>();
-
-        public void addElement(FileListElement fle) {
-            fileList.add(fle);
-        }
-
-        public void removeElement(int index) {
-            this.fileList.remove(index);
-        }
-
-        public int getSize() {
-            return this.fileList.size();
-        }
-
-        public String[] getDisplayNames() {
-            String[] displayNames = new String[getSize()];
-            for (int i = 0; i < getSize(); i++) {
-                displayNames[i] = fileList.get(i).getDisplayText();
-            }
-            return displayNames;
-        }
-
-        public String[] getFiles() {
-            String[] files = new String[getSize()];
-            for (int i = 0; i < getSize(); i++) {
-                files[i] = fileList.get(i).getFile().getAbsolutePath();
-            }
-            return files;
-        }
-
-        public void moveDown(int index) {
-            if (index < 0 || index >= getSize() - 1) {
-                return;
-            }
-
-            FileListElement element = fileList.get(index);
-            fileList.remove(index);
-            fileList.add(index + 1, element);
-        }
-
-        public void moveUp(int index) {
-            if (index <= 0 || index > getSize() - 1) {
-                return;
-            }
-
-            FileListElement element = fileList.get(index);
-            fileList.remove(index);
-            fileList.add(index - 1, element);
-        }
-
-        public DefaultListModel getDefaultListModel() {
-            DefaultListModel model = new DefaultListModel();
-            for (FileListElement el : fileList) {
-                model.addElement(el.getDisplayText());
-            }
-            return model;
-        }
-
-        public void clear() {
-            for (int i = 0; i < getSize(); i++) {
-                removeElement(0);
-            }
-        }
-
-        public FileListElement get(int index) {
-            return fileList.get(index);
-        }
-    }
-
-    private final class FileListElement {
-
-        private final File file;
-        private String displayText;
-
-        public FileListElement(File f) {
-            this.file = f;
-            this.setDisplayText(f.getAbsolutePath());
-        }
-
-        public void setDisplayText(String text) {
-            this.displayText = text;
-        }
-
-        public void appendToDisplayText(String s) {
-            setDisplayText(displayText + s);
-        }
-
-        public String getDisplayText() {
-            return this.displayText;
-        }
-
-        public File getFile() {
-            return this.file;
-        }
-
-    }
 }
