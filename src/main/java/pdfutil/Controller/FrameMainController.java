@@ -88,9 +88,9 @@ public class FrameMainController {
             }
         });
 
-        Thread pdfMergeThread = new Thread(mergeTask);
-        pdfMergeThread.start();
+        new Thread(mergeTask).start();
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        System.out.println(mergeTask.getStatus());
     }
 
     // TODO REFACTOR

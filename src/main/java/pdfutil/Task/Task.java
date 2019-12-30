@@ -15,6 +15,10 @@ public abstract class Task implements Runnable{
         this.status = status;
     }
 
+    public TaskStatus getStatus(){
+        return this.status;
+    }
+
     //private int taskId = -1;
     private CallbackHandler parent;
     private volatile TaskStatus status = TaskStatus.NOT_STARTED;
