@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import pdfutil.Model.FileType;
 
 /**
  * 
  * @author Tuur Neckebroeck
  */
-public class FileUtil {
+public final class FileUtil {
 
     /**
      * author: https://www.journaldev.com/842/java-get-file-extension
@@ -31,17 +32,68 @@ public class FileUtil {
     }
 
     public static FileType getFileType(File file) {
+        PDDocument doc = null;
         try {
             if(!file.exists()) return FileType.DOES_NOT_EXIST;
             if(!file.isFile()) return FileType.NOT_FILE;
-            PDDocument doc = PDDocument.load(file);
-            
+            doc = PDDocument.load(file);
         } catch (InvalidPasswordException e) {
             return FileType.PDF_ENCRYPTED;
         } catch (IOException e){
             return FileType.NOT_PDF;
-        } 
+        } finally {
+            try {
+                if (doc != null) doc.close();
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         return FileType.PDF_NOT_ENCRYPTED;
+    }
+
+    /**
+     *
+     * SOURCE: https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
+     *
+     */
+    public static class OSDetector {
+
+        private static String OS = System.getProperty("os.name").toLowerCase();
+
+
+        public static boolean isWindows() {
+
+            return (OS.indexOf("win") >= 0);
+
+        }
+
+        public static boolean isMac() {
+
+            return (OS.indexOf("mac") >= 0);
+
+        }
+
+        public static boolean isUnix() {
+
+            return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
+
+        }
+
+        public static boolean isSolaris() {
+
+            return (OS.indexOf("sunos") >= 0);
+
+        }
+
+        public static String getDesktopPath() {
+            String destFile = destFile = System.getProperty("user.home");
+            if (OSDetector.isWindows()) {
+                destFile += "\\Desktop\\";
+            } else {
+                destFile += "/Desktop/";
+            }
+            return destFile;
+        }
     }
 }

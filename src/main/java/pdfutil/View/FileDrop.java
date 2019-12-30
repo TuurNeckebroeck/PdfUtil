@@ -1,4 +1,4 @@
-package pdfutil;
+package pdfutil.View;
 
 
 import java.awt.datatransfer.DataFlavor;
