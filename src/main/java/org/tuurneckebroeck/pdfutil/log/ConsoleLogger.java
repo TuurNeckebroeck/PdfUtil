@@ -25,7 +25,10 @@ public class ConsoleLogger extends VerbosityLogger {
 
     @Override
     protected void logAll(LogLevel level, Class<?> parent, String content){
-        System.out.println(String.format("%-10s %-25s %s", level.toString(), parent.getSimpleName(), content));
+        String fullClassName = parent.getTypeName();
+        int lastIndex = fullClassName.lastIndexOf(".") + 1;
+        String className = fullClassName.substring(lastIndex == -1 ? 0 : lastIndex);
+        System.out.println(String.format("%-10s %-25s %s", level.toString(), className, content));
     }
 
     @Override

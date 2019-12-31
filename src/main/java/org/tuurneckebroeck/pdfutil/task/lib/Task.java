@@ -3,7 +3,7 @@ package org.tuurneckebroeck.pdfutil.task.lib;
 /**
  * @author Tuur Neckebroeck
  */
-public abstract class Task implements Runnable{
+public abstract class Task implements Runnable {
 
     public Task(TaskCallbackHandler parent) {
         this.parent = parent;
@@ -24,7 +24,7 @@ public abstract class Task implements Runnable{
 
     //private int taskId = -1;
     private TaskCallbackHandler parent;
-    private volatile TaskStatus status = TaskStatus.NOT_STARTED;
+    private volatile TaskStatus status = TaskStatus.NOT_STARTED; // TODO moet dit volatile zijn?
 
     public enum TaskStatus {
         NOT_STARTED, EXECUTING, FINISHED, FAILED

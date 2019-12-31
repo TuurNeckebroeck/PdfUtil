@@ -12,6 +12,7 @@ import org.tuurneckebroeck.pdfutil.model.FileType;
 import org.tuurneckebroeck.pdfutil.FileUtil;
 import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.task.MergeTask;
+import org.tuurneckebroeck.pdfutil.task.WatermarkTask;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.view.FrameInfo;
@@ -125,6 +126,34 @@ public class MainController {
         SplitController splitController = new SplitController(new FrameSplit(), fileList.get(index).getFile());
         splitController.setLogger(logger);
         splitController.showSplitView();
+    }
+
+    // TODO wijzigen naar array van indices voor het watermerken van meerdere documenten
+    public void watermarkPdf(int[] index) {
+        File[] selectedFiles = indicesToFiles(index);
+
+        // TODO outputfile selecteren, watermerk bestand selecteren.
+        String destFile = "/home/tuur/Desktop/watermerked.pdf";
+        logger.log(LogLevel.DEBUG, getClass(), "Watermark task starting...");
+        WatermarkTask watermarkTask = new WatermarkTask(selectedFiles[0],
+                new File("/home/tuur/Desktop/watermerk.pdf"),
+                new File(destFile),
+                new TaskCallbackHandler() {
+                    @Override
+                    public void onCallback(Task.TaskStatus status) {
+                        view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                        if(status == Task.TaskStatus.FINISHED) {
+                            JOptionPane.showMessageDialog(view, "File saved as " + destFile);
+                            logger.log(LogLevel.DEBUG, getClass(), "Watermark task finished");
+                        }else{
+                            logger.log(LogLevel.ERROR, getClass(), "WatermarkTask returned FAILED task status on callback.");
+                            JOptionPane.showMessageDialog(view, "Watermark failed.");
+                        }
+                    }
+                });
+
+        new Thread(watermarkTask).start();
+        view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
 
     // TODO REFACTOR

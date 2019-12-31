@@ -17,6 +17,7 @@ Gradle (with the Kotlin DSL) is used as build manager.
 - Image extraction
 - Text extraction
 - Watermarking
+- Watermark removing
 
 ## Used libraries
 - Apache PDFBox 2.0.16 & preflight 2.0.16 (https://pdfbox.apache.org)

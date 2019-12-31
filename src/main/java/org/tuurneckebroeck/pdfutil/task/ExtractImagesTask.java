@@ -1,11 +1,11 @@
 package org.tuurneckebroeck.pdfutil.task;
 
-import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
+import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 
-public class PasswordProtectTask extends Task {
+public class ExtractImagesTask extends Task {
 
-    public PasswordProtectTask(TaskCallbackHandler parent) {
+    public ExtractImagesTask(TaskCallbackHandler parent) {
         super(parent);
     }
 
@@ -14,4 +14,5 @@ public class PasswordProtectTask extends Task {
         // TODO implementeren
         throw new UnsupportedOperationException("Not implemented yet.");
     }
+
 }
