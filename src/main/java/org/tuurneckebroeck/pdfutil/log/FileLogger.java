@@ -43,7 +43,10 @@ public class FileLogger extends VerbosityLogger {
 
         Date now = new Date(System.currentTimeMillis());
         printWriter.println(dateFormatter.format(now));
-        printWriter.println(String.format("%s%-10s %-25s %s", "    ", level.toString(), parent.getSimpleName(), content));
+        printWriter.println(String.format("%s%-20s %-15s %s", WHITESPACE, level.toString(), "::",parent.getName()));
+        printWriter.println(String.format("%s%s", WHITESPACE, content));
+        printWriter.println(DASHED_LINE);
+        printWriter.println();
         printWriter.flush();
     }
 
@@ -54,6 +57,8 @@ public class FileLogger extends VerbosityLogger {
         canWrite = false;
     }
 
+    private static final String WHITESPACE = "    ";
+    private static final String DASHED_LINE = "----------------------------------------------------------------------------------------------------";
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
     private File logFile;
     private PrintWriter printWriter;

@@ -1,6 +1,9 @@
 package org.tuurneckebroeck.pdfutil.controller;
 
-import org.tuurneckebroeck.pdfutil.task.lib.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.log.LogLevel;
+import org.tuurneckebroeck.pdfutil.log.NullLogger;
+import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
+import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.SplitTask;
 import org.tuurneckebroeck.pdfutil.view.FrameSplit;
 import org.tuurneckebroeck.pdfutil.FileUtil;
@@ -20,6 +23,10 @@ public class SplitController {
         this.inputFile = inputFile;
 
         initView();
+    }
+
+    public void setLogger(VerbosityLogger logger) {
+        this.logger = logger;
     }
 
     private void initView() {
@@ -42,13 +49,14 @@ public class SplitController {
         File secondOutputFile = new File(parent + FileUtil.OSDetector.getPathSeparator() + "splitted_2.pdf");
         System.out.println(firstOutputFile.getPath());
         System.out.println(secondOutputFile.getPath());
-        Task splitTask = new SplitTask(inputFile, page, firstOutputFile, secondOutputFile, new CallbackHandler() {
+        Task splitTask = new SplitTask(inputFile, page, firstOutputFile, secondOutputFile, new TaskCallbackHandler() {
             @Override
             public void onCallback(Task.TaskStatus status) {
                 view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 if(status == Task.TaskStatus.FINISHED) {
                     JOptionPane.showMessageDialog(view, "Finished succesfully");
                 } else {
+                    logger.log(LogLevel.ERROR, getClass(), "Error while splitting pdf.");
                     JOptionPane.showMessageDialog(view, "Split failed: " + status.toString());
                 }
             }
@@ -64,6 +72,7 @@ public class SplitController {
         }
     }
 
+    private VerbosityLogger logger = new NullLogger();
     private FrameSplit view;
     private File inputFile;
 }

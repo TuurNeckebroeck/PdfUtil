@@ -3,7 +3,7 @@ package org.tuurneckebroeck.pdfutil.task;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-import org.tuurneckebroeck.pdfutil.task.lib.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
 import java.io.File;
@@ -20,7 +20,7 @@ public final class SplitTask extends Task {
      * @param inputFile The PDF document to be splitted
      * @param splitPage The page after which the document will be splitted
      */
-    public SplitTask(File inputFile, int splitPage, File firstOutputFile, File secondOutputFile, CallbackHandler parent) {
+    public SplitTask(File inputFile, int splitPage, File firstOutputFile, File secondOutputFile, TaskCallbackHandler parent) {
         super(parent);
         this.file = inputFile;
         this.splitPage = splitPage;

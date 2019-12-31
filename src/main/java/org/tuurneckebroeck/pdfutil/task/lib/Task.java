@@ -5,7 +5,7 @@ package org.tuurneckebroeck.pdfutil.task.lib;
  */
 public abstract class Task implements Runnable{
 
-    public Task(CallbackHandler parent) {
+    public Task(TaskCallbackHandler parent) {
         this.parent = parent;
     }
 
@@ -23,7 +23,7 @@ public abstract class Task implements Runnable{
     }
 
     //private int taskId = -1;
-    private CallbackHandler parent;
+    private TaskCallbackHandler parent;
     private volatile TaskStatus status = TaskStatus.NOT_STARTED;
 
     public enum TaskStatus {

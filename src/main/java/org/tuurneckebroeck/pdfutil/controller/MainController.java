@@ -13,7 +13,7 @@ import org.tuurneckebroeck.pdfutil.FileUtil;
 import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.task.MergeTask;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
-import org.tuurneckebroeck.pdfutil.task.lib.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.view.FrameInfo;
 import org.tuurneckebroeck.pdfutil.view.FrameMain;
 import org.tuurneckebroeck.pdfutil.view.FrameSplit;
@@ -99,7 +99,7 @@ public class MainController {
         File[] files = indicesToFiles(indices);
         File destFile = FileUtil.addToFileName(files[0], "_merged");
 
-        Task mergeTask = new MergeTask(files, destFile, new CallbackHandler() {
+        Task mergeTask = new MergeTask(files, destFile, new TaskCallbackHandler() {
             @Override
             public void onCallback(Task.TaskStatus status) {
                 view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -123,6 +123,7 @@ public class MainController {
         checkView();
 
         SplitController splitController = new SplitController(new FrameSplit(), fileList.get(index).getFile());
+        splitController.setLogger(logger);
         splitController.showSplitView();
     }
 

@@ -2,7 +2,7 @@ package org.tuurneckebroeck.pdfutil.task;
 
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.tuurneckebroeck.pdfutil.task.lib.CallbackHandler;
+import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
 import java.io.File;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public final class MergeTask extends Task {
 
-    public MergeTask(File[] files, File outputFile, CallbackHandler parent) {
+    public MergeTask(File[] files, File outputFile, TaskCallbackHandler parent) {
         super(parent);
         this.files = files;
         this.outputFile = outputFile;
