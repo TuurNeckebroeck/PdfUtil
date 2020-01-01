@@ -3,6 +3,7 @@ package org.tuurneckebroeck.pdfutil.task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
+@Deprecated
 public class PasswordProtectTask extends Task {
 
     public PasswordProtectTask(TaskCallbackHandler parent) {

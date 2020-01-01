@@ -3,6 +3,7 @@ package org.tuurneckebroeck.pdfutil.task.lib;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 public class TaskChain extends Task {
 
     public TaskChain(TaskCallbackHandler parent) {

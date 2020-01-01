@@ -25,6 +25,7 @@ public class WatermarkTask extends Task {
             overlay.setInputFile(inputFile.getPath());
             overlay.setAllPagesOverlayFile(overlayFile.getPath());
             overlay.overlay(new HashMap<>()).save(outputFile);
+            overlay.close();
             setStatus(TaskStatus.FINISHED);
         } catch(IOException e) {
             setStatus(TaskStatus.FAILED);
