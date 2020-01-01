@@ -8,8 +8,8 @@ import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
  */
 public abstract class Task implements Runnable {
 
-    public Task(TaskCallbackHandler parent) {
-        this.parent = parent;
+    public Task(TaskCallbackHandler callbackHandler) {
+        this.parent = callbackHandler;
     }
 
     public void setLogger(VerbosityLogger logger) {
@@ -31,6 +31,10 @@ public abstract class Task implements Runnable {
 
     public TaskStatus getStatus(){
         return this.status;
+    }
+
+    public TaskCallbackHandler getCallbackHandler(){
+        return this.parent;
     }
 
     //private int taskId = -1;

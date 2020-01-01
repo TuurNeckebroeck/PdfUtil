@@ -2,6 +2,7 @@ package org.tuurneckebroeck.pdfutil.task;
 
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
@@ -24,6 +25,7 @@ public final class MergeTask extends Task {
     @Override
     public void run() {
         setStatus(TaskStatus.EXECUTING);
+        getLogger().log(LogLevel.DEBUG, getClass(), "Status: " + getStatus());
 
         PDFMergerUtility PDFMerger = new PDFMergerUtility();
         PDFMerger.setDestinationFileName(outputFile.getAbsolutePath());
@@ -45,11 +47,14 @@ public final class MergeTask extends Task {
 
         } catch (IOException e) {
             setStatus(TaskStatus.FAILED);
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
             e.printStackTrace();
         } catch (Exception e) {
             setStatus(TaskStatus.FAILED);
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
             e.printStackTrace();
         } finally {
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Status: %s %s performing callback to: %s", getStatus(), "          ",getCallbackHandler().getClass().getSimpleName()));
             callback();
         }
     }

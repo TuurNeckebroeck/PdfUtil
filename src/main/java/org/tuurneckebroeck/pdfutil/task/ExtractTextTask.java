@@ -1,7 +1,6 @@
 package org.tuurneckebroeck.pdfutil.task;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
@@ -9,7 +8,6 @@ import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 
 import java.io.*;
 
-@Deprecated
 public class ExtractTextTask extends Task {
 
     public ExtractTextTask(File inputFile, File outputFile, TaskCallbackHandler parent) {
@@ -21,7 +19,7 @@ public class ExtractTextTask extends Task {
     @Override
     public void run() {
         setStatus(TaskStatus.EXECUTING);
-        getLogger().log(LogLevel.DEBUG, getClass(), "ExtractTextTask :: EXECUTING");
+        getLogger().log(LogLevel.DEBUG, getClass(), "Status: " + getStatus());
 
         PDFTextStripper stripper = null;
         try {
@@ -38,10 +36,11 @@ public class ExtractTextTask extends Task {
             setStatus(TaskStatus.FINISHED);
         } catch (IOException e) {
             setStatus(TaskStatus.FAILED);
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
             e.printStackTrace();
         }
 
-        getLogger().log(LogLevel.DEBUG, getClass(), "ExtractTextTask :: " + getStatus());
+        getLogger().log(LogLevel.DEBUG, getClass(), String.format("Status: %s %s performing callback to: %s", getStatus(), "          ",getCallbackHandler().getClass().getSimpleName()));
         callback();
     }
 

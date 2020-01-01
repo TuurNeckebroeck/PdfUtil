@@ -47,21 +47,16 @@ public class SplitController {
         String parent = inputFile.toPath().getParent().toString();
         File firstOutputFile = new File(parent + FileUtil.OSDetector.getPathSeparator() + "splitted_1.pdf");
         File secondOutputFile = new File(parent + FileUtil.OSDetector.getPathSeparator() + "splitted_2.pdf");
-        System.out.println(firstOutputFile.getPath());
-        System.out.println(secondOutputFile.getPath());
-        Task splitTask = new SplitTask(inputFile, page, firstOutputFile, secondOutputFile, new TaskCallbackHandler() {
-            @Override
-            public void onCallback(Task.TaskStatus status) {
-                view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                if(status == Task.TaskStatus.FINISHED) {
-                    JOptionPane.showMessageDialog(view, "Finished succesfully");
-                } else {
-                    logger.log(LogLevel.ERROR, getClass(), "Error while splitting pdf.");
-                    JOptionPane.showMessageDialog(view, "Split failed: " + status.toString());
-                }
+        Task splitTask = new SplitTask(inputFile, page, firstOutputFile, secondOutputFile, status -> {
+            view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            if(status == Task.TaskStatus.FINISHED) {
+                JOptionPane.showMessageDialog(view, "Finished succesfully");
+            } else {
+                JOptionPane.showMessageDialog(view, "Split failed: " + status.toString());
             }
         });
 
+        splitTask.setLogger(logger);
         new Thread(splitTask).start();
         view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }

@@ -3,6 +3,7 @@ package org.tuurneckebroeck.pdfutil.task;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
@@ -31,6 +32,7 @@ public final class SplitTask extends Task {
     @Override
     public void run() {
         setStatus(TaskStatus.EXECUTING);
+        getLogger().log(LogLevel.DEBUG, getClass(), "Status: " + getStatus());
         try {
             PDDocument doc = PDDocument.load(file);
             if(!isValidSplitPage(doc, splitPage)) {
@@ -61,13 +63,17 @@ public final class SplitTask extends Task {
             setStatus(TaskStatus.FINISHED);
         } catch (InvalidPasswordException e) {
             setStatus(TaskStatus.FAILED);
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
         } catch (IOException e) {
             setStatus(TaskStatus.FAILED);
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
         } catch (IllegalArgumentException e) {
             //Illegal splitpage supplied
             setStatus(TaskStatus.FAILED);
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
         }
 
+        getLogger().log(LogLevel.DEBUG, getClass(), String.format("Status: %s %s performing callback to: %s", getStatus(), "          ",getCallbackHandler().getClass().getSimpleName()));
         callback();
     }
 
