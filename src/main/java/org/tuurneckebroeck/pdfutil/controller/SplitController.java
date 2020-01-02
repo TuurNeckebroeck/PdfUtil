@@ -1,12 +1,10 @@
 package org.tuurneckebroeck.pdfutil.controller;
 
-import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.log.NullLogger;
 import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
-import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.SplitTask;
 import org.tuurneckebroeck.pdfutil.view.FrameSplit;
-import org.tuurneckebroeck.pdfutil.FileUtil;
+import org.tuurneckebroeck.pdfutil.util.FileUtil;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 
 import javax.swing.*;

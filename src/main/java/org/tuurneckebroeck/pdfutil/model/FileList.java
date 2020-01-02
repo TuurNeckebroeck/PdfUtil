@@ -1,6 +1,7 @@
 package org.tuurneckebroeck.pdfutil.model;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -50,6 +51,14 @@ public final class FileList extends ArrayList<FileListElement> {
             model.addElement(el.getDisplayText());
         }
         return model;
+    }
+
+    public File[] indicesToFiles(int[] indices) {
+        File files[] = new File[indices.length];
+        for (int i = 0; i < indices.length; i++) {
+            files[i] = get(indices[i]).getFile();
+        }
+        return files;
     }
 
 }

@@ -9,18 +9,16 @@ import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
 import org.tuurneckebroeck.pdfutil.model.FileListElement;
 import org.tuurneckebroeck.pdfutil.model.FileType;
-import org.tuurneckebroeck.pdfutil.FileUtil;
+import org.tuurneckebroeck.pdfutil.util.FileUtil;
 import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.task.MergeTask;
 import org.tuurneckebroeck.pdfutil.task.WatermarkTask;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
-import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.view.FrameInfo;
-import org.tuurneckebroeck.pdfutil.view.FrameMain;
 import org.tuurneckebroeck.pdfutil.view.FrameSplit;
+import org.tuurneckebroeck.pdfutil.view.main.MainView;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,14 +28,14 @@ import java.util.List;
  * @author Tuur Neckebroeck
  */
 public class MainController {
+// DESIGN FIXME TODO Make controller completely independent of view implementation (e.g. console / gui)
 
-    private FrameMain view;
+    private MainView view;
     private FileList fileList;
     private final String LOCK_SYMBOL = "\uD83D\uDD12";
     private VerbosityLogger logger = new NullLogger();
 
-    public MainController(FrameMain view, FileList fileList) {
-        logger.log(LogLevel.DEBUG, getClass(), "MainController::MainController");
+    public MainController(MainView view, FileList fileList) {
         this.view = view;
         view.setController(this);
         this.fileList = fileList;
@@ -49,12 +47,12 @@ public class MainController {
 
     public void showMainView() {
         checkView();
-        view.setVisible(true);
+        view.showView();
     }
 
-    public void addDroppedFiles(File[] files) {
-        logger.log(LogLevel.DEBUG, getClass(), "MainController::addDroppedFiles");
+    public void addToWorkspace(File[] files) {
         checkView();
+
         for (File file : files) {
             FileType type = FileUtil.getFileType(file);
             if (type.isPdf()) {
@@ -64,7 +62,21 @@ public class MainController {
                 }
                 fileList.add(fileListElement);
             }
+        }
 
+        view.setFileListModel(fileList.getDefaultListModel());
+    }
+
+    public void addToWorkspace(File file) {
+        checkView();
+
+        FileType type = FileUtil.getFileType(file);
+        if (type.isPdf()) {
+            FileListElement fileListElement = new FileListElement(file);
+            if (type == FileType.PDF_ENCRYPTED) {
+                fileListElement.appendToDisplayText(String.format(" %s ", LOCK_SYMBOL));
+            }
+            fileList.add(fileListElement);
         }
 
         view.setFileListModel(fileList.getDefaultListModel());
@@ -84,7 +96,7 @@ public class MainController {
         view.setSelectedFileIndex(index + 1);
     }
 
-    public void deleteElementsFromGui(int[] indices) {
+    public void deleteFromWorkspace(int[] indices) {
         checkView();
 
         Arrays.sort(indices);
@@ -95,29 +107,29 @@ public class MainController {
     }
 
     public void mergePdfs(int[] indices) {
+        mergePdfs(fileList.indicesToFiles(indices));
+    }
+
+    public void mergePdfs(File[] files) {
         checkView();
 
-        File[] files = indicesToFiles(indices);
         File destFile = FileUtil.addToFileName(files[0], "_merged");
 
-        Task mergeTask = new MergeTask(files, destFile, new TaskCallbackHandler() {
-            @Override
-            public void onCallback(Task.TaskStatus status) {
-                view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        Task mergeTask = new MergeTask(files, destFile, status -> {
+                view.setWaiting(false);
                 if(status == Task.TaskStatus.FINISHED) {
-                    JOptionPane.showMessageDialog(view, "File saved as " + destFile);
+                    view.showMessage("File saved as " + destFile);
                     fileList.clear();
                     view.setFileListModel(fileList.getDefaultListModel());
                 } else if (status == Task.TaskStatus.FAILED) {
                     // DESIGN mogelijkheid voorzien om bv. errormessage mee te geven.
                     logger.log(LogLevel.ERROR, getClass(), "MergeTask returned FAILED task status on callback.");
-                    JOptionPane.showMessageDialog(view, "Merge failed.");
+                    view.showMessage("Merge failed.");
                 }
-            }
-        });
+            });
 
         new Thread(mergeTask).start();
-        view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        view.setWaiting(true);
     }
 
     public void splitPdf(int index) {
@@ -128,43 +140,41 @@ public class MainController {
         splitController.showSplitView();
     }
 
-    // TODO wijzigen naar array van indices voor het watermerken van meerdere documenten
-    public void watermarkPdf(int[] index) {
-        File[] selectedFiles = indicesToFiles(index);
+    public void watermarkPdf(File[] files) {
 
         // TODO outputfile selecteren, watermerk bestand selecteren.
         String destFile = "/home/tuur/Desktop/watermerked.pdf";
         logger.log(LogLevel.DEBUG, getClass(), "Watermark task starting...");
-        WatermarkTask watermarkTask = new WatermarkTask(selectedFiles[0],
+        WatermarkTask watermarkTask = new WatermarkTask(files[0],
                 new File("/home/tuur/Desktop/watermerk.pdf"),
                 new File(destFile),
-                new TaskCallbackHandler() {
-                    @Override
-                    public void onCallback(Task.TaskStatus status) {
-                        view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                status ->  {
+                        view.setWaiting(false);
                         if(status == Task.TaskStatus.FINISHED) {
-                            JOptionPane.showMessageDialog(view, "File saved as " + destFile);
+                            view.showMessage("File saved as " + destFile);
                             logger.log(LogLevel.DEBUG, getClass(), "Watermark task finished");
                         }else{
                             logger.log(LogLevel.ERROR, getClass(), "WatermarkTask returned FAILED task status on callback.");
-                            JOptionPane.showMessageDialog(view, "Watermark failed.");
+                            view.showMessage("Watermark failed.");
                         }
-                    }
-                });
+                    });
 
         new Thread(watermarkTask).start();
-        view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        view.setWaiting(true);
+    }
+
+    public void addPasswordProtection(int[] indices, String password) {
+        addPasswordProtection(fileList.indicesToFiles(indices), password);
     }
 
     // TODO REFACTOR
-    public void addPasswordProtection(int[] indices, String password) {
+    public void addPasswordProtection(File[] files, String password) {
         checkView();
 
         List<File> encryptedFiles = new ArrayList<>();
-        int nbSelectedFiles = indices.length;
+        int nbSelectedFiles = files.length;
 
         try {
-            File files[] = indicesToFiles(indices);
 
             for (File file : files) {
                 PDDocument doc = PDDocument.load(file);
@@ -194,7 +204,7 @@ public class MainController {
             e.printStackTrace();
             e.printStackTrace();
             logger.log(LogLevel.ERROR, getClass(), "Not all files could be encrypted:\n" + FileUtil.getExceptionStackTrace(e));
-            JOptionPane.showMessageDialog(view, "An error occured, not all files have been encrypted.");
+            view.showMessage("An error occured, not all files have been encrypted.");
         } finally {
             StringBuilder sb = new StringBuilder();
             if (nbSelectedFiles == encryptedFiles.size()) {
@@ -210,7 +220,7 @@ public class MainController {
                 sb.append("\n");
                 sb.append(f.getAbsolutePath());
             }
-            JOptionPane.showMessageDialog(view, sb.toString());
+            view.showMessage(sb.toString());
         }
     }
 
@@ -232,7 +242,7 @@ public class MainController {
                             try {
                                 doc = PDDocument.load(file);
                                 doc.close();
-                                JOptionPane.showMessageDialog(view, file.getAbsoluteFile() + "\nis not password protected. Proceeding to next file.");
+                                view.showMessage(file.getAbsoluteFile() + "\nis not password protected. Proceeding to next file.");
                                 continue outer;
                             } catch (InvalidPasswordException e) {
                             }
@@ -247,13 +257,13 @@ public class MainController {
                         correctPassword = true;
                         break inner;
                     } catch (InvalidPasswordException e) {
-                        JOptionPane.showMessageDialog(view, "Invalid password.");
+                        view.showMessage("Invalid password.");
                     }
 
                 } while (tries > 0);
 
                 if (!correctPassword) {
-                    JOptionPane.showMessageDialog(view, "3 failed password attempts. Proceeding to next file.");
+                    view.showMessage("3 failed password attempts. Proceeding to next file.");
                     continue outer;
                 }
 
@@ -261,7 +271,7 @@ public class MainController {
                 File newFile = FileUtil.addToFileName(file, "_decrypted");
                 doc.save(newFile);
                 doc.close();
-                JOptionPane.showMessageDialog(view, "Password stripped file saved as\n"+newFile.getAbsolutePath());
+                view.showMessage("Password stripped file saved as\n"+newFile.getAbsolutePath());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -282,13 +292,5 @@ public class MainController {
         }
     }
 
-
-    private File[] indicesToFiles(int[] indices) {
-        File files[] = new File[indices.length];
-        for (int i = 0; i < indices.length; i++) {
-            files[i] = fileList.get(indices[i]).getFile();
-        }
-        return files;
-    }
 
 }

@@ -12,6 +12,8 @@ dependencies {
     //compile(fileTree(mapOf("dir" to "libs", "include" to  "*.jar")))
     implementation("org.apache.pdfbox:pdfbox:2.0.16")
     implementation("org.apache.pdfbox:preflight:2.0.16")
+    implementation("commons-cli:commons-cli:1.4")
+
     testCompile("junit", "junit", "4.12")
 }
 
@@ -21,7 +23,7 @@ configure<JavaPluginConvention> {
 
 tasks.jar {
     manifest {
-        attributes(mapOf("Main-Class" to "org.tuurneckebroeck.pdfutil.PdfUtilBootstrap"))
+        attributes(mapOf("Main-Class" to "org.tuurneckebroeck.pdfutil.PdfUtil"))
     }
 
     // Voeg dependencies toe

@@ -7,6 +7,8 @@ import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
  * @author Tuur Neckebroeck
  */
 public abstract class Task implements Runnable {
+// DESIGN make task generic: input and output type e.g. Task<File, List<File>> for SplitTask
+// DESIGN beter voor cohesie: wegschrijven van outputfile kan dan uitbesteed worden aan andere klasse
 
     public Task(TaskCallbackHandler callbackHandler) {
         this.parent = callbackHandler;

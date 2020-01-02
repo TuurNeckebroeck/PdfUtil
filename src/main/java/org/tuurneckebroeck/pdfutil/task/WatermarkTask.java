@@ -1,7 +1,6 @@
 package org.tuurneckebroeck.pdfutil.task;
 
 import org.apache.pdfbox.multipdf.Overlay;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;

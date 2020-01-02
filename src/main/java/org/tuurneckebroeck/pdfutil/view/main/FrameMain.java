@@ -1,9 +1,10 @@
-package org.tuurneckebroeck.pdfutil.view;
+package org.tuurneckebroeck.pdfutil.view.main;
 
 import org.tuurneckebroeck.pdfutil.controller.MainController;
 import org.tuurneckebroeck.pdfutil.view.lib.FileDrop;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,7 +12,7 @@ import java.awt.event.ActionListener;
  *
  * @author Tuur Neckebroeck
  */
-public class FrameMain extends javax.swing.JFrame {
+public class FrameMain extends JFrame implements MainView {
 
     /**
      * Creates new form FrameMerge
@@ -19,24 +20,40 @@ public class FrameMain extends javax.swing.JFrame {
     public FrameMain() {
         initComponents();
 
-        new FileDrop(System.out, jPanel1, null, new FileDrop.Listener() {
-            public void filesDropped(java.io.File[] files) {
-                checkController();
-                controller.addDroppedFiles(files);
-            }
+        new FileDrop(System.out, jPanel1, null, files -> {
+            checkController();
+            controller.addToWorkspace(files);
         });
     }
 
-    public void setController(MainController controller) {
-        this.controller = controller;
+    @Override
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
     }
 
+    @Override
+    public void setWaiting(boolean waiting) {
+        getContentPane().setCursor(Cursor.getPredefinedCursor(waiting ? Cursor.WAIT_CURSOR : Cursor.DEFAULT_CURSOR));
+    }
+
+    @Override
     public void setFileListModel(ListModel<String> model) {
         listFiles.setModel(model);
     }
 
+    @Override
+    public void setController(MainController controller) {
+        this.controller = controller;
+    }
+
+    @Override
     public void setSelectedFileIndex(int index) {
         listFiles.setSelectedIndex(index);
+    }
+
+    @Override
+    public void showView() {
+        super.setVisible(true);
     }
 
 
@@ -228,7 +245,7 @@ public class FrameMain extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
         checkController();
         int indices[] = listFiles.getSelectedIndices();
-        controller.deleteElementsFromGui(indices);
+        controller.deleteFromWorkspace(indices);
     }
 
     private void btnMergeActionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,6 +297,7 @@ public class FrameMain extends javax.swing.JFrame {
     }
 
 
+
     private MainController controller;
 
     private javax.swing.JButton btnDelete;
@@ -294,4 +312,6 @@ public class FrameMain extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JList<String> listFiles;
+
+
 }
