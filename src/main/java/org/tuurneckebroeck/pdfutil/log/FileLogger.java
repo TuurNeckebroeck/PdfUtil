@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class FileLogger extends VerbosityLogger {
 
+    // DESIGN LogFormat klasse toevoegen: formaat definieren waarin naar bestand gelogd wordt
+    // kan dan ook gebruikt worden om logfile te parsen en bv. alle ERROR logs van bepaalde klasse op te halen.
+    // Misschien ook logger versie toevoegen in logfile om parsing errors te voorkomen
+
     /**
      * Initialises the FileLogger with default verbosity ERROR.
      *

@@ -36,7 +36,7 @@ public final class SplitTask extends Task {
         try {
             PDDocument doc = PDDocument.load(file);
             if(!isValidSplitPage(doc, splitPage)) {
-                throw new IllegalArgumentException("Illegal splitPage supplied");
+                throw new IllegalArgumentException(String.format("Illegal splitPage (%d) supplied for file '%s'", splitPage, file.getAbsolutePath()));
             }
 
             PDDocument firstPart = new PDDocument(),

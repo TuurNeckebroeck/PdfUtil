@@ -27,16 +27,17 @@ public class PdfUtil {
         CommandLine line = parseArguments(args);
         MainController mainController = null;
 
-        if(line.hasOption(OPTION_INTERFACE)) {
+        try {
             CompositeLogger logger = new CompositeLogger();
-            try {
-                logger.registerLogger(new FileLogger(
-                        LogLevel.DEBUG,
-                        new File(FileUtil.OSDetector.getDesktopPath()
-                                + FileUtil.OSDetector.getPathSeparator() + "console_log.txt"),
-                        true));
+            logger.registerLogger(new FileLogger(
+                    LogLevel.DEBUG,
+                    new File(Constant.getLogPath() + Constant.getFileSeparator() + Constant.getTimeStampedFileName("consolelog", "txt")),
+                    true));
+            Constant.getInstance().setLogger(logger);
 
-                switch(line.getOptionValue(OPTION_INTERFACE).toLowerCase()) {
+
+            if (line.hasOption(OPTION_INTERFACE)) {
+                switch (line.getOptionValue(OPTION_INTERFACE).toLowerCase()) {
                     case "gui":
                         logger.registerLogger(new ConsoleLogger(LogLevel.DEBUG));
                         mainController = new MainController(new FrameMain(), new FileList());
@@ -48,20 +49,23 @@ public class PdfUtil {
                 mainController.setLogger(logger);
                 mainController.showMainView();
                 return;
-            }catch (Exception e) {
-                e.printStackTrace();
+
             }
-        }
 
 
-        if (line.hasOption(OPTION_INPUT)) {
-            System.out.println(line.getOptionValue(OPTION_INPUT));
-            String fileName = line.getOptionValue("filename");
+            if (line.hasOption(OPTION_INPUT)) {
+                System.out.println(line.getOptionValue(OPTION_INPUT));
+                String fileName = line.getOptionValue("filename");
 
 
-            // TODO implement
-        } else {
-            //printAppHelp();
+                // TODO implement
+            } else {
+                //printAppHelp();
+            }
+
+        } catch (Exception e) {
+            System.err.println("UNCAUGHT EXCEPTION");
+            e.printStackTrace();
         }
     }
 

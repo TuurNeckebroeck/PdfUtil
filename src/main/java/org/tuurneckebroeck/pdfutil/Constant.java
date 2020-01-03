@@ -4,6 +4,8 @@ import org.tuurneckebroeck.pdfutil.log.NullLogger;
 import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -58,6 +60,12 @@ public final class Constant {
 
     public VerbosityLogger getLogger() {
         return logger;
+    }
+
+    public static String getTimeStampedFileName(String name, String extension) {
+        while (extension.startsWith(".")) extension = extension.substring(1);
+        SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd_hh-mm-ss.");
+        return name + format.format(new Date()) + extension;
     }
 
     public static final String getAppName() {
