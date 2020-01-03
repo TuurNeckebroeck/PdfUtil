@@ -10,6 +10,7 @@ import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
 import org.tuurneckebroeck.pdfutil.model.FileListElement;
 import org.tuurneckebroeck.pdfutil.model.FileType;
+import org.tuurneckebroeck.pdfutil.task.PasswordProtectTask;
 import org.tuurneckebroeck.pdfutil.util.FileUtil;
 import org.tuurneckebroeck.pdfutil.model.FileList;
 import org.tuurneckebroeck.pdfutil.task.MergeTask;
@@ -152,8 +153,33 @@ public class MainController {
 
     // TODO REFACTOR
     public void addPasswordProtection(File[] files, String password) {
+        Task passwordProtectTask = new PasswordProtectTask(files, password,
+                status -> {
+                    view.setWaiting(false);
+                    String message;
+                    switch(status) {
+                        case FAILED:
+                            message = "Password protection failed for each given file.";
+                            break;
+                        case PARTIALLY_FAILED:
+                            message = "Password protection was partially successful.";
+                            break;
+                        case FINISHED:
+                            message = "Password protection successful.";
+                            break;
+                        default:
+                            message = "An error occurred when trying to encrypt the given files...";
+                            logger.log(LogLevel.ERROR, getClass(),
+                                    String.format("Unexpected returned ResultStatus (%S) of PasswordEncryptionTask. Files: \n%s",
+                                            status,
+                                            Arrays.stream(files).map(f->f.getAbsolutePath()).reduce((f, rest) -> f + ", " + rest)));
+                    }
+                    view.showMessage(message);
+                });
+        passwordProtectTask.setLogger(logger);
 
-
+        new Thread(passwordProtectTask).start();
+        view.setWaiting(true);
     }
 
     // TODO REFACTOR

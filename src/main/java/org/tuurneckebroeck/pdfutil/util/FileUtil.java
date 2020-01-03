@@ -61,7 +61,7 @@ public final class FileUtil {
     public static boolean isSolaris() { return (getOSName().indexOf("sunos") >= 0);}
 
     public static String getPathSeparator() {
-        return System.getProperty("path.separator");
+        return System.getProperty("file.separator");
     }
 
 }

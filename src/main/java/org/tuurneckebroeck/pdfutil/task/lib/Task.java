@@ -45,6 +45,6 @@ public abstract class Task implements Runnable {
     private volatile TaskStatus status = TaskStatus.NOT_STARTED; // TODO moet dit volatile zijn?
 
     public enum TaskStatus {
-        NOT_STARTED, EXECUTING, FINISHED, FAILED
+        NOT_STARTED, EXECUTING, FINISHED, PARTIALLY_FAILED, FAILED
     }
 }
