@@ -11,25 +11,17 @@ import org.tuurneckebroeck.pdfutil.model.FileType;
 
 public final class FileUtil {
 
-    // TODO verplaatsen naar constant
-
-    /**
-     * @author: https://www.journaldev.com/842/java-get-file-extension
-     */
     public static String getFileExtension(File file) {
         String fileName = file.getName();
-        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
-            return fileName.substring(fileName.lastIndexOf(".") + 1);
-        } else {
-            return "";
-        }
+        int lastPointIndex = fileName.lastIndexOf(".");
+        return (lastPointIndex != -1 && lastPointIndex != 0) ? fileName.substring(lastPointIndex + 1) : "";
     }
 
     public static File addToFileName(File file, String addition) {
         String fileName = file.getName();
         int index = fileName.indexOf(".");
         String name = fileName.substring(0, index) + addition;
-        return new File(file.getParentFile().getAbsolutePath() + (OSDetector.isWindows() ? "\\" : "/") + name + "." + getFileExtension(file));
+        return new File(file.getParentFile().getAbsolutePath() + getPathSeparator() + name + "." + getFileExtension(file));
     }
 
     public static FileType getFileType(File file) {
@@ -62,52 +54,14 @@ public final class FileUtil {
         return w.toString();
     }
 
-    /**
-     *
-     * @author https://www.mkyong.com/java/how-to-detect-os-in-java-systemgetpropertyosname/
-     *
-     */
-    public static class OSDetector {
+    public static String getOSName() {return System.getProperty("os.name").toLowerCase();}
+    public static boolean isWindows() {return (getOSName().indexOf("win") >= 0);}
+    public static boolean isMac() { return (getOSName().indexOf("mac") >= 0); }
+    public static boolean isUnix() { return (getOSName().indexOf("nix") >= 0 || getOSName().indexOf("nux") >= 0 || getOSName().indexOf("aix") > 0); }
+    public static boolean isSolaris() { return (getOSName().indexOf("sunos") >= 0);}
 
-        private static String OS = System.getProperty("os.name").toLowerCase();
-
-
-        public static boolean isWindows() {
-
-            return (OS.indexOf("win") >= 0);
-
-        }
-
-        public static boolean isMac() {
-
-            return (OS.indexOf("mac") >= 0);
-
-        }
-
-        public static boolean isUnix() {
-
-            return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0);
-
-        }
-
-        public static boolean isSolaris() {
-
-            return (OS.indexOf("sunos") >= 0);
-
-        }
-
-        public static String getDesktopPath() {
-            String destFile = destFile = System.getProperty("user.home");
-            if (OSDetector.isWindows()) {
-                destFile += "\\Desktop\\";
-            } else {
-                destFile += "/Desktop/";
-            }
-            return destFile;
-        }
-
-        public static String getPathSeparator() {
-            return File.separator;
-        }
+    public static String getPathSeparator() {
+        return System.getProperty("path.separator");
     }
+
 }

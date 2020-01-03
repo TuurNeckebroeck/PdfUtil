@@ -43,8 +43,8 @@ public class SplitController {
         checkView();
         // TODO aanpassen
         String parent = inputFile.toPath().getParent().toString();
-        File firstOutputFile = new File(parent + FileUtil.OSDetector.getPathSeparator() + "splitted_1.pdf");
-        File secondOutputFile = new File(parent + FileUtil.OSDetector.getPathSeparator() + "splitted_2.pdf");
+        File firstOutputFile = new File(parent + FileUtil.getPathSeparator() + "splitted_1.pdf");
+        File secondOutputFile = new File(parent + FileUtil.getPathSeparator() + "splitted_2.pdf");
         Task splitTask = new SplitTask(inputFile, page, firstOutputFile, secondOutputFile, status -> {
             view.getContentPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             if(status == Task.TaskStatus.FINISHED) {

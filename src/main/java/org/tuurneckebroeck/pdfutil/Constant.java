@@ -28,7 +28,23 @@ public final class Constant {
     }
 
 
-    private void initDirectories(){
+
+
+    public void setLogger(VerbosityLogger logger) {
+        this.logger = logger;
+    }
+
+    public VerbosityLogger getLogger() {
+        return logger;
+    }
+
+    public static String getTimeStampedFileName(String name, String extension) {
+        while (extension.startsWith(".")) extension = extension.substring(1);
+        SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd_HH-mm-ss.");
+        return name + format.format(new Date()) + extension;
+    }
+
+    private static void initDirectories(){
         File appPathFile = new File(APP_PATH);
         if(!appPathFile.isDirectory()) {
             if(appPathFile.isFile()) {
@@ -54,20 +70,6 @@ public final class Constant {
         }
     }
 
-    public void setLogger(VerbosityLogger logger) {
-        this.logger = logger;
-    }
-
-    public VerbosityLogger getLogger() {
-        return logger;
-    }
-
-    public static String getTimeStampedFileName(String name, String extension) {
-        while (extension.startsWith(".")) extension = extension.substring(1);
-        SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd_hh-mm-ss.");
-        return name + format.format(new Date()) + extension;
-    }
-
     public static final String getAppName() {
         return APP_NAME;
     }
@@ -86,6 +88,7 @@ public final class Constant {
 
 
     private VerbosityLogger logger = new NullLogger();
+    private static Constant instance = null;
 
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String HOME_PATH = System.getProperty("user.home");
@@ -95,7 +98,4 @@ public final class Constant {
 
     private static final String SUBFOLDER_LOG = "log";
     private static final String[] SUBFOLDERS = {SUBFOLDER_LOG};
-
-
-    private static Constant instance = null;
 }

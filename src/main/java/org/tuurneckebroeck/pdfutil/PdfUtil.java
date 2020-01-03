@@ -29,11 +29,11 @@ public class PdfUtil {
 
         try {
             CompositeLogger logger = new CompositeLogger();
+            Constant.getInstance().setLogger(logger);
             logger.registerLogger(new FileLogger(
                     LogLevel.DEBUG,
                     new File(Constant.getLogPath() + Constant.getFileSeparator() + Constant.getTimeStampedFileName("consolelog", "txt")),
                     true));
-            Constant.getInstance().setLogger(logger);
 
 
             if (line.hasOption(OPTION_INTERFACE)) {
@@ -46,7 +46,6 @@ public class PdfUtil {
                         mainController = new MainController(new ConsoleMain(), new FileList());
                         break;
                 }
-                mainController.setLogger(logger);
                 mainController.showMainView();
                 return;
 

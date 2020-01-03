@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import org.tuurneckebroeck.pdfutil.Constant;
 import org.tuurneckebroeck.pdfutil.log.NullLogger;
 import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
@@ -32,17 +33,14 @@ public class MainController {
 
     private MainView view;
     private FileList fileList;
-    private final String LOCK_SYMBOL = "\uD83D\uDD12";
     private VerbosityLogger logger = new NullLogger();
+    private final String LOCK_SYMBOL = "\uD83D\uDD12";
 
     public MainController(MainView view, FileList fileList) {
         this.view = view;
         view.setController(this);
         this.fileList = fileList;
-    }
-
-    public void setLogger(VerbosityLogger logger) {
-        this.logger = logger;
+        this.logger = Constant.getInstance().getLogger();
     }
 
     public void showMainView() {
