@@ -27,6 +27,5 @@
 .nb-gradle
 .nb-gradle-properties
 
-src/main/resources/org.tuurneckebroeck.pdfutil.task/ExtractTextTask/
-
-src/main/resources/org.tuurneckebroeck.pdfutil.task/RemoveWatermarkTask/
+src/main/resources/org.tuurneckebroeck.pdfutil/task/ExtractTextTask/
+src/main/resources/org.tuurneckebroeck.pdfutil/task/RemoveWatermarkTask/

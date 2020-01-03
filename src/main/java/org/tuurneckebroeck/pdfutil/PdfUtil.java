@@ -11,8 +11,6 @@ import org.tuurneckebroeck.pdfutil.util.FileUtil;
 import org.tuurneckebroeck.pdfutil.view.main.ConsoleMain;
 import org.tuurneckebroeck.pdfutil.view.main.FrameMain;
 
-
-import java.awt.*;
 import java.io.File;
 
 /**
@@ -22,11 +20,14 @@ import java.io.File;
  */
 public class PdfUtil {
 
+    // CLI interactive shell proposition:
+    // https://search.maven.org/artifact/org.beryx/text-io/3.4.0/jar
+
     public static void runApplication(String[] args) {
         CommandLine line = parseArguments(args);
         MainController mainController = null;
 
-        if(line.hasOption("interface")) {
+        if(line.hasOption(OPTION_INTERFACE)) {
             CompositeLogger logger = new CompositeLogger();
             try {
                 logger.registerLogger(new FileLogger(
@@ -35,7 +36,7 @@ public class PdfUtil {
                                 + FileUtil.OSDetector.getPathSeparator() + "console_log.txt"),
                         true));
 
-                switch(line.getOptionValue("interface").toLowerCase()) {
+                switch(line.getOptionValue(OPTION_INTERFACE).toLowerCase()) {
                     case "gui":
                         logger.registerLogger(new ConsoleLogger(LogLevel.DEBUG));
                         mainController = new MainController(new FrameMain(), new FileList());
@@ -53,8 +54,8 @@ public class PdfUtil {
         }
 
 
-        if (line.hasOption("input")) {
-            System.out.println(line.getOptionValue("input"));
+        if (line.hasOption(OPTION_INPUT)) {
+            System.out.println(line.getOptionValue(OPTION_INPUT));
             String fileName = line.getOptionValue("filename");
 
 
@@ -65,6 +66,13 @@ public class PdfUtil {
     }
 
     public static void main(String[] args) {
+        setLookAndFeel();
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> runApplication(args));
+    }
+
+    private static void setLookAndFeel(){
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -87,28 +95,14 @@ public class PdfUtil {
             java.util.logging.Logger.getLogger(FrameMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> runApplication(args));
-    }
-
-    public static Options getOptions() {
-        Options options = new Options();
-        options.addOption("interface", "interface", true, "Interface to use");
-
-        options.addOption("i", "input", true, "Input file");
-        options.addOption("o", "output", true, "Output file");
-        options.addOption("a", "action", true, "Define the action on the input file");
-        return options;
     }
 
     private static CommandLine parseArguments(String[] args) {
-        Options options = getOptions();
         CommandLine line = null;
         CommandLineParser parser = new DefaultParser();
 
         try {
-            line = parser.parse(options, args);
+            line = parser.parse(CLI_OPTIONS, args);
         } catch (ParseException ex) {
             System.err.println("Failed to parse command line arguments");
             System.err.println(ex.toString());
@@ -118,5 +112,16 @@ public class PdfUtil {
 
         return line;
     }
+
+    private final static String OPTION_INTERFACE = "interface",
+                                OPTION_INPUT = "input",
+                                OPTION_OUTPUT = "output",
+                                OPTION_ACTION = "action";
+
+    private final static Options CLI_OPTIONS = new Options()
+            .addOption("interface", OPTION_INTERFACE, true, "Interface to use")
+            .addOption("i", OPTION_INPUT, true, "Input file")
+            .addOption("o", OPTION_OUTPUT, true, "Output file")
+            .addOption("a", OPTION_ACTION, true, "Define the action on the input file");
 
 }

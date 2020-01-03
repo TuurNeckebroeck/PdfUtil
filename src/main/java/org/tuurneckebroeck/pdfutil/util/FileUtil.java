@@ -11,6 +11,8 @@ import org.tuurneckebroeck.pdfutil.model.FileType;
 
 public final class FileUtil {
 
+    // TODO verplaatsen naar constant
+
     /**
      * @author: https://www.journaldev.com/842/java-get-file-extension
      */
