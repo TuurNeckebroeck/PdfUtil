@@ -27,9 +27,6 @@ public final class Constant {
         initDirectories();
     }
 
-
-
-
     public void setLogger(VerbosityLogger logger) {
         this.logger = logger;
     }
@@ -37,6 +34,8 @@ public final class Constant {
     public VerbosityLogger getLogger() {
         return logger;
     }
+
+
 
     public static String getTimeStampedFileName(String name, String extension) {
         while (extension.startsWith(".")) extension = extension.substring(1);

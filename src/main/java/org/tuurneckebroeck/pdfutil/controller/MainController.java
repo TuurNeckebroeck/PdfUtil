@@ -18,6 +18,7 @@ import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.view.FrameInfo;
 import org.tuurneckebroeck.pdfutil.view.FrameSplit;
 import org.tuurneckebroeck.pdfutil.view.main.MainView;
+import org.tuurneckebroeck.pdfutil.view.main.NullMainView;
 
 import javax.swing.*;
 import java.io.File;
@@ -29,9 +30,8 @@ import java.util.List;
  * @author Tuur Neckebroeck
  */
 public class MainController {
-// DESIGN FIXME TODO Make controller completely independent of view implementation (e.g. console / gui)
 
-    private MainView view;
+    private MainView view = new NullMainView();
     private FileList fileList;
     private VerbosityLogger logger = new NullLogger();
     private final String LOCK_SYMBOL = "\uD83D\uDD12";
@@ -44,30 +44,24 @@ public class MainController {
     }
 
     public void showMainView() {
-        checkView();
         view.showView();
     }
 
     public void addToWorkspace(File[] files) {
-        checkView();
-
         for (File file : files) {
-            FileType type = FileUtil.getFileType(file);
-            if (type.isPdf()) {
-                FileListElement fileListElement = new FileListElement(file);
-                if (type == FileType.PDF_ENCRYPTED) {
-                    fileListElement.appendToDisplayText(String.format(" %s ", LOCK_SYMBOL));
-                }
-                fileList.add(fileListElement);
-            }
+            addFileToFileList(file);
         }
 
         view.setFileListModel(fileList.getDefaultListModel());
     }
 
     public void addToWorkspace(File file) {
-        checkView();
+        addFileToFileList(file);
 
+        view.setFileListModel(fileList.getDefaultListModel());
+    }
+
+    private void addFileToFileList(File file) {
         FileType type = FileUtil.getFileType(file);
         if (type.isPdf()) {
             FileListElement fileListElement = new FileListElement(file);
@@ -76,27 +70,21 @@ public class MainController {
             }
             fileList.add(fileListElement);
         }
-
-        view.setFileListModel(fileList.getDefaultListModel());
     }
 
     public void moveUpElement(int index) {
-        checkView();
         fileList.moveUp(index);
         view.setFileListModel(fileList.getDefaultListModel());
         view.setSelectedFileIndex(index-1);
     }
 
     public void moveDownElement(int index) {
-        checkView();
         fileList.moveDown(index);
         view.setFileListModel(fileList.getDefaultListModel());
         view.setSelectedFileIndex(index + 1);
     }
 
     public void deleteFromWorkspace(int[] indices) {
-        checkView();
-
         Arrays.sort(indices);
         for (int i = indices.length - 1; i >= 0; i--) {
             fileList.remove(indices[i]);
@@ -109,8 +97,6 @@ public class MainController {
     }
 
     public void mergePdfs(File[] files) {
-        checkView();
-
         File destFile = FileUtil.addToFileName(files[0], "_merged");
 
         Task mergeTask = new MergeTask(files, destFile, status -> {
@@ -131,8 +117,6 @@ public class MainController {
     }
 
     public void splitPdf(int index) {
-        checkView();
-
         SplitController splitController = new SplitController(new FrameSplit(), fileList.get(index).getFile());
         splitController.setLogger(logger);
         splitController.showSplitView();
@@ -167,8 +151,6 @@ public class MainController {
 
     // TODO REFACTOR
     public void addPasswordProtection(File[] files, String password) {
-        checkView();
-
         List<File> encryptedFiles = new ArrayList<>();
         int nbSelectedFiles = files.length;
 
@@ -224,8 +206,6 @@ public class MainController {
 
     // TODO REFACTOR
     public void disablePasswordProtection(int[] indices) {
-        checkView();
-
         outer:
         for (int index : indices) {
             File file = fileList.get(index).getFile();
@@ -278,17 +258,8 @@ public class MainController {
     }
 
     public void showInfoFrame(int index) {
-        checkView();
-
         FrameInfo fi = new FrameInfo(fileList.get(index).getFile());
         fi.setVisible(true);
     }
-
-    private void checkView() {
-        if (view == null) {
-            throw new IllegalStateException("The FrameMain view of this controller should not be null.");
-        }
-    }
-
 
 }

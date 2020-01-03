@@ -11,7 +11,6 @@ import java.io.IOException;
  *
  */
 public abstract class VerbosityLogger {
-// DESIGN misschien static maken? ConsoleLogger.log(level ..) en dus 1 verbosity level voor elke consolelogger
 
     /**
      *  Creates a VerbosityLogger object, given the maximum verbosity level to log.

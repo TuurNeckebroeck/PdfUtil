@@ -11,16 +11,12 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.tuurneckebroeck.pdfutil.log.LogLevel;
-import org.tuurneckebroeck.pdfutil.log.NullLogger;
-import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Deprecated
@@ -65,7 +61,6 @@ public class RemoveWatermarkTask extends Task {
     private void searchReplace (String search, String replace,
                                        String encoding, boolean replaceAll, PDDocument doc) throws IOException {
         PDPageTree pages = doc.getDocumentCatalog().getPages();
-        List<Integer> remove = new ArrayList<>(); // CADD
 
         for (PDPage page : pages) {
             PDFStreamParser parser = new PDFStreamParser(page);
@@ -116,7 +111,6 @@ public class RemoveWatermarkTask extends Task {
         }
     }
 
-//CADD
     // https://github.com/thebabush/pdf-strip-watermark/blob/master/src/main/java/it/fuck/kenoph/Main.java
     static int removeState(List<Object> tokens, List<Integer> remove, int i) {
         remove.add(i);
