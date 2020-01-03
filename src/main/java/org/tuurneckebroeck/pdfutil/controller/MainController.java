@@ -112,6 +112,7 @@ public class MainController {
                 }
             });
 
+        mergeTask.setLogger(logger);
         new Thread(mergeTask).start();
         view.setWaiting(true);
     }
@@ -151,57 +152,8 @@ public class MainController {
 
     // TODO REFACTOR
     public void addPasswordProtection(File[] files, String password) {
-        List<File> encryptedFiles = new ArrayList<>();
-        int nbSelectedFiles = files.length;
 
-        try {
 
-            for (File file : files) {
-                PDDocument doc = PDDocument.load(file);
-
-                // Define the length of the encryption key.
-                // Possible values are 40 or 128 (256 will be available in PDFBox 2.0).
-                int keyLength = 128;
-
-                AccessPermission ap = new AccessPermission();
-
-                ap.setCanAssembleDocument(false);
-
-                // Owner password (to open the file with all permissions) is "12345"
-                // User password (to open the file but with restricted permissions, is empty here)
-                StandardProtectionPolicy spp = new StandardProtectionPolicy(password, password, ap);
-                spp.setEncryptionKeyLength(keyLength);
-                spp.setPermissions(ap);
-                doc.protect(spp);
-
-                File newFile = FileUtil.addToFileName(file, "_encrypted");
-                doc.save(newFile);
-                doc.close();
-                encryptedFiles.add(newFile);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            e.printStackTrace();
-            logger.log(LogLevel.ERROR, getClass(), "Not all files could be encrypted:\n" + FileUtil.getExceptionStackTrace(e));
-            view.showMessage("An error occured, not all files have been encrypted.");
-        } finally {
-            StringBuilder sb = new StringBuilder();
-            if (nbSelectedFiles == encryptedFiles.size()) {
-                sb.append("All of the files have been encrypted:");
-            } else {
-                sb.append(encryptedFiles.size());
-                sb.append(" of the ");
-                sb.append(nbSelectedFiles);
-                sb.append(" selected files have been encrypted:");
-            }
-
-            for (File f : encryptedFiles) {
-                sb.append("\n");
-                sb.append(f.getAbsolutePath());
-            }
-            view.showMessage(sb.toString());
-        }
     }
 
     // TODO REFACTOR
