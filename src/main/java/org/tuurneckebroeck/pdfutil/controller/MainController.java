@@ -1,15 +1,12 @@
 package org.tuurneckebroeck.pdfutil.controller;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
-import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.tuurneckebroeck.pdfutil.Constant;
 import org.tuurneckebroeck.pdfutil.log.NullLogger;
 import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
 import org.tuurneckebroeck.pdfutil.model.FileListElement;
 import org.tuurneckebroeck.pdfutil.model.FileType;
+import org.tuurneckebroeck.pdfutil.task.PasswordDisableTask;
 import org.tuurneckebroeck.pdfutil.task.PasswordProtectTask;
 import org.tuurneckebroeck.pdfutil.util.FileUtil;
 import org.tuurneckebroeck.pdfutil.model.FileList;
@@ -21,11 +18,9 @@ import org.tuurneckebroeck.pdfutil.view.FrameSplit;
 import org.tuurneckebroeck.pdfutil.view.main.MainView;
 import org.tuurneckebroeck.pdfutil.view.main.NullMainView;
 
-import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Tuur Neckebroeck
@@ -114,8 +109,8 @@ public class MainController {
             });
 
         mergeTask.setLogger(logger);
-        new Thread(mergeTask).start();
         view.setWaiting(true);
+        new Thread(mergeTask).start();
     }
 
     public void splitPdf(int index) {
@@ -124,9 +119,8 @@ public class MainController {
         splitController.showSplitView();
     }
 
+    // TODO outputfile selecteren, watermerk bestand selecteren.
     public void watermarkPdf(File[] files) {
-
-        // TODO outputfile selecteren, watermerk bestand selecteren.
         String destFile = "/home/tuur/Desktop/watermerked.pdf";
         logger.log(LogLevel.DEBUG, getClass(), "Watermark task starting...");
         WatermarkTask watermarkTask = new WatermarkTask(files[0],
@@ -143,15 +137,14 @@ public class MainController {
                         }
                     });
 
-        new Thread(watermarkTask).start();
         view.setWaiting(true);
+        new Thread(watermarkTask).start();
     }
 
     public void addPasswordProtection(int[] indices, String password) {
         addPasswordProtection(fileList.indicesToFiles(indices), password);
     }
 
-    // TODO REFACTOR
     public void addPasswordProtection(File[] files, String password) {
         Task passwordProtectTask = new PasswordProtectTask(files, password,
                 status -> {
@@ -170,7 +163,7 @@ public class MainController {
                         default:
                             message = "An error occurred when trying to encrypt the given files...";
                             logger.log(LogLevel.ERROR, getClass(),
-                                    String.format("Unexpected returned ResultStatus (%S) of PasswordEncryptionTask. Files: \n%s",
+                                    String.format("Unexpected returned ResultStatus (%s) of PasswordProtectTask. Files: \n%s",
                                             status,
                                             Arrays.stream(files).map(f->f.getAbsolutePath()).reduce((f, rest) -> f + ", " + rest)));
                     }
@@ -178,61 +171,48 @@ public class MainController {
                 });
         passwordProtectTask.setLogger(logger);
 
-        new Thread(passwordProtectTask).start();
         view.setWaiting(true);
+        new Thread(passwordProtectTask).start();
     }
 
-    // TODO REFACTOR
-    public void disablePasswordProtection(int[] indices) {
-        outer:
-        for (int index : indices) {
-            File file = fileList.get(index).getFile();
-            int tries = 3, maxTries = 3;
-            try {
-                PDDocument doc = null;
-                boolean correctPassword = false;
-                inner:
-                do {
-                    try {
-                        if (tries == maxTries) {
-                            try {
-                                doc = PDDocument.load(file);
-                                doc.close();
-                                view.showMessage(file.getAbsoluteFile() + "\nis not password protected. Proceeding to next file.");
-                                continue outer;
-                            } catch (InvalidPasswordException e) {
-                            }
-                        }
-                        String password = JOptionPane.showInputDialog(view, file.getAbsolutePath() + "\n is secured with a password. Please enter it:");
-                        if (password.equals("")) {
-                            break outer;
-                        }
-                        tries--;
-                        doc = PDDocument.load(file, password);
+    public void disablePasswordProtection(int index, String password) {
+        File inputFile = fileList.get(index).getFile();
 
-                        correctPassword = true;
-                        break inner;
-                    } catch (InvalidPasswordException e) {
-                        view.showMessage("Invalid password.");
+        try {
+            if(!PasswordDisableTask.isPasswordProtected(inputFile)) {
+                view.showMessage(String.format("The selected file '%s' is not password protected.", inputFile.getAbsolutePath()));
+                return;
+            }
+        } catch (IOException e) {
+            logger.log(LogLevel.ERROR, getClass(),
+                    String.format("Exception on check if file '%s' is password protected:\n%s", inputFile.getAbsolutePath(), e.getMessage()));
+            return;
+        }
+
+        Task passwordDisableTask = new PasswordDisableTask(inputFile, password,
+                status -> {
+                    view.setWaiting(false);
+                    String message;
+                    switch (status) {
+                        case FAILED:
+                            message = "Failed to disable password. Try again.";
+                            break;
+                        case FINISHED:
+                            message = "Password disabled successfully.";
+                            break;
+                        default:
+                            message = "An error occurred when trying to decrypt the given files...";
+                            logger.log(LogLevel.ERROR, getClass(),
+                                    String.format("Unexpected returned ResultStatus (%s) of PasswordDisableTask on file: \n%s",
+                                            status, inputFile));
                     }
 
-                } while (tries > 0);
+                    view.showMessage(message);
+                });
+        passwordDisableTask.setLogger(logger);
 
-                if (!correctPassword) {
-                    view.showMessage("3 failed password attempts. Proceeding to next file.");
-                    continue outer;
-                }
-
-                doc.setAllSecurityToBeRemoved(true);
-                File newFile = FileUtil.addToFileName(file, "_decrypted");
-                doc.save(newFile);
-                doc.close();
-                view.showMessage("Password stripped file saved as\n"+newFile.getAbsolutePath());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        view.setWaiting(true);
+        new Thread(passwordDisableTask).run();
     }
 
     public void showInfoFrame(int index) {

@@ -21,7 +21,7 @@ public final class FileUtil {
         String fileName = file.getName();
         int index = fileName.indexOf(".");
         String name = fileName.substring(0, index) + addition;
-        return new File(file.getParentFile().getAbsolutePath() + getPathSeparator() + name + "." + getFileExtension(file));
+        return new File(file.getParent() + getPathSeparator() + name + "." + getFileExtension(file));
     }
 
     public static FileType getFileType(File file) {

@@ -9,6 +9,7 @@ import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,7 +45,8 @@ public final class MergeTask extends Task {
                 p.close();
             }
             setStatus(TaskStatus.FINISHED);
-
+            getLogger().log(LogLevel.DEBUG, getClass(), String.format("Successfully merged following files: ",
+                    Arrays.stream(files).map(f->f.getAbsolutePath()).reduce((f,rest) -> f + ", " + rest)));
         } catch (IOException e) {
             setStatus(TaskStatus.FAILED);
             getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));

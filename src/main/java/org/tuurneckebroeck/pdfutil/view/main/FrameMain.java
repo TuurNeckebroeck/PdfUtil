@@ -272,12 +272,11 @@ public class FrameMain extends JFrame implements MainView {
 
     private void btnDisablePasswordActionPerformed(java.awt.event.ActionEvent evt) {
         checkController();
-        if (listFiles.getSelectedIndices().length < 1) {
-            return;
-        }
 
-        int indices[] = listFiles.getSelectedIndices();
-        controller.disablePasswordProtection(indices);
+        String password = JOptionPane.showInputDialog(this,
+                String.format("Password of file\n%s", listFiles.getSelectedValue()));
+
+        controller.disablePasswordProtection(listFiles.getSelectedIndex(), password);
     }
 
     private void listFilesMouseClicked(java.awt.event.MouseEvent evt) {
