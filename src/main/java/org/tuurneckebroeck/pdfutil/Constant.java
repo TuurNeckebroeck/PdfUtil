@@ -91,9 +91,10 @@ public final class Constant {
 
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String HOME_PATH = System.getProperty("user.home");
-    private static final String APP_NAME = "PdfUtil";
     private static final String APP_FOLDER_NAME = "pdfutil";
     private static final String APP_PATH = HOME_PATH + FILE_SEPARATOR + "." + APP_FOLDER_NAME;
+
+    public static final String APP_NAME = "PdfUtil";
 
     private static final String SUBFOLDER_LOG = "log";
     private static final String[] SUBFOLDERS = {SUBFOLDER_LOG};

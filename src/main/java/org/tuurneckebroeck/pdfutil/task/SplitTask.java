@@ -3,6 +3,7 @@ package org.tuurneckebroeck.pdfutil.task;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.tuurneckebroeck.pdfutil.Constant;
 import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
@@ -43,7 +44,7 @@ public final class SplitTask extends Task {
                         secondPart = new PDDocument();
             PDDocumentInformation docInfo = doc.getDocumentInformation();
             // DESIGN creator ophalen via singleton?
-            docInfo.setCreator("PdfUtil - Tuur Neckebroeck");
+            docInfo.setCreator(Constant.APP_NAME);
             firstPart.setDocumentInformation(docInfo);
             firstPart.setDocumentInformation(docInfo);
 
