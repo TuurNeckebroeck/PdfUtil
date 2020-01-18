@@ -1,22 +1,21 @@
 package org.tuurneckebroeck.pdfutil.task;
 
-import jdk.nashorn.internal.scripts.JO;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.printing.PDFPageable;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.PageRanges;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Logger;
+import java.util.Arrays;
 
 public class RectoVersoPrintTask extends Task {
 
@@ -25,51 +24,62 @@ public class RectoVersoPrintTask extends Task {
         this.file = file;
     }
 
+    /**
+     * Select printer based on name, containing the given string.
+     *
+     * @param partialName The subname of the printer to select
+     */
+    public void setPrinterByName(String partialName) {
+        partialName = partialName.toLowerCase();
+
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+        for(PrintService service : printServices) {
+            if(service.getName().toLowerCase().contains(partialName)) {
+                useDefaultPrinter = false;
+                selectedPrinterService = service;
+                return;
+            }
+        }
+    }
+
     @Override
     public void run() {
         setStatus(TaskStatus.EXECUTING);
         try {
             PDDocument doc = PDDocument.load(file);
-            PDDocument evenPages = new PDDocument(), oddPages = new PDDocument();
-            for(int page = 0; page < doc.getNumberOfPages(); page ++) {
-                if (page % 2 == 0) {
-                    // page index 0 = page 1 = odd
-                    oddPages.addPage(doc.getPage(page));
-                } else {
-                    evenPages.addPage(doc.getPage(page));
-                }
-            }
+            PDDocument oddPagesDoc = composeOddPagesDoc(doc),
+                    evenPagesDoc = composeEvenPagesDoc(doc);
+
             PrinterJob printerJob = PrinterJob.getPrinterJob();
-            System.out.println(printerJob.getPrintService().getName());
-
-
-
-            printerJob.setPageable(new PDFPageable(oddPages));
-            System.out.println("Print odd");
-            //printerJob.print();
-            oddPages.close();
-
-
-            JOptionPane.showMessageDialog(null, "Klik op OK als de de geprinte paginas opnieuw ingevoerd zijn.");
-
-            // TODO paginas van even omdraaien (en eventueel van laatste naar eerste laten printen?)
-            printerJob = PrinterJob.getPrinterJob();
-
-            // todo herschrijven
-            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-            for(PrintService service : printServices) {
-                if(service.getName().contains("1102")) {
-                    printerJob.setPrintService(service);
-                    break;
-                }
-                System.out.println(service.getName());
+            if(!useDefaultPrinter) {
+                printerJob.setPrintService(selectedPrinterService);
             }
+//            System.out.println("Selected: " + printerJob.getPrintService().getName());
 
-            printerJob.setPageable(new PDFPageable(evenPages));
-            System.out.println("Print even");
+            // PRINT ODD PAGES
+            printerJob.setPageable(new PDFPageable(oddPagesDoc));
+            printerJob.setJobName(String.format(" %s - odd pages", file.getName()));
             printerJob.print();
-            evenPages.close();
+            oddPagesDoc.close();
 
+            int result = JOptionPane.showConfirmDialog(null, "Move the printed pages into the input tray.");
+            if(result == JOptionPane.OK_OPTION) {
+                // WAIT FOR PRINTING - DIALOG OK
+
+
+                printerJob = PrinterJob.getPrinterJob();
+                if(!useDefaultPrinter) {
+                    printerJob.setPrintService(selectedPrinterService);
+                }
+
+                // PRINT EVEN PAGES
+                printerJob.setPageable(new PDFPageable(evenPagesDoc));
+                printerJob.setJobName(String.format(" %s - even pages", file.getName()));
+                printerJob.print();
+                evenPagesDoc.close();
+            } else {
+                setStatus(TaskStatus.PARTIALLY_FAILED);
+            }
 
             doc.close();
             setStatus(TaskStatus.FINISHED);
@@ -82,5 +92,35 @@ public class RectoVersoPrintTask extends Task {
         }
     }
 
+    private PDDocument composeEvenPagesDoc(PDDocument sourceDoc) {
+        int nbPages = sourceDoc.getNumberOfPages();
+        PDDocument evenPagesDoc = new PDDocument();
+
+        if(nbPages % 2 != 0) {
+            evenPagesDoc.addPage(new PDPage(PDRectangle.A4));
+        }
+
+        for(int pageInd = nbPages%2==0?nbPages-1:nbPages-2; pageInd > 0; pageInd -= 2) {
+            PDPage page = sourceDoc.getPage(pageInd);
+            page.setRotation(180);
+            evenPagesDoc.addPage(page);
+        }
+
+        return evenPagesDoc;
+    }
+
+    private PDDocument composeOddPagesDoc(PDDocument sourceDoc) {
+        int nbPages = sourceDoc.getNumberOfPages();
+        PDDocument oddPagesDoc = new PDDocument();
+
+        for(int pageInd = 0; pageInd < nbPages; pageInd += 2) {
+            oddPagesDoc.addPage(sourceDoc.getPage(pageInd));
+        }
+
+        return oddPagesDoc;
+    }
+
+    private boolean useDefaultPrinter = true;
+    private PrintService selectedPrinterService;
     private File file;
 }
