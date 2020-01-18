@@ -38,6 +38,8 @@ public class ConsoleMain implements MainView {
                 controller.addToWorkspace(new File("/home/tuur/Downloads/splitted_2.pdf"));
             } else if(input.equals("mergen")) {
                 controller.mergePdfs(new int[]{0,1});
+            } else if(input.equals("exit")) {
+                running = false;
             }
         }
     }

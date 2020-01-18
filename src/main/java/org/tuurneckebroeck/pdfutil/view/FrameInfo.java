@@ -1,5 +1,7 @@
 package org.tuurneckebroeck.pdfutil.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -9,6 +11,12 @@ import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.tuurneckebroeck.pdfutil.controller.PrintController;
+
+import javax.swing.*;
+
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
 
 /**
  *
@@ -52,6 +60,11 @@ public class FrameInfo extends javax.swing.JFrame {
         }
     }
 
+    private void btnPrintClicked(ActionEvent e) {
+        PrintController controller = new PrintController();
+        controller.printPdf(this.file);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,6 +91,14 @@ public class FrameInfo extends javax.swing.JFrame {
         lblInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        btnPrint = new JButton("Print Recto Verso");
+        btnPrint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                btnPrintClicked(actionEvent);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,7 +108,9 @@ public class FrameInfo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(lblInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE))
+                        .addComponent(lblInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE)
+                    .addComponent(btnPrint, DEFAULT_SIZE, 200, Short.MAX_VALUE)) //CADD
+
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblFile)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -99,7 +122,9 @@ public class FrameInfo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblFile)
                 .addGap(18, 18, 18)
-                .addComponent(lblInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblInfo, PREFERRED_SIZE, 352, PREFERRED_SIZE)
+                    .addGap(18,18,18)                                               //CADD
+                    .addComponent(btnPrint, PREFERRED_SIZE, 100, PREFERRED_SIZE)          //CADD
                 .addContainerGap())
         );
 
@@ -110,6 +135,7 @@ public class FrameInfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblFile;
     private javax.swing.JLabel lblInfo;
+    private JButton btnPrint;
     // End of variables declaration//GEN-END:variables
 
     private class InformationFieldCollection {
