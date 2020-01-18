@@ -6,14 +6,7 @@ import org.tuurneckebroeck.pdfutil.task.RectoVersoPrintTask;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttribute;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.PageRanges;
-import java.awt.print.PageFormat;
-import java.awt.print.PrinterJob;
 import java.io.File;
-import java.io.IOException;
 
 // TODO Refactor
 public class PrintController {
