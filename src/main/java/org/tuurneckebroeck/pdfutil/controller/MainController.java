@@ -29,7 +29,7 @@ public class MainController {
 
     private MainView view = new NullMainView();
     private FileList fileList;
-    private VerbosityLogger logger = new NullLogger();
+    private VerbosityLogger logger = NullLogger.instance();
     private final String LOCK_SYMBOL = "\uD83D\uDD12";
 
     public MainController(MainView view, FileList fileList) {
@@ -217,6 +217,7 @@ public class MainController {
 
     public void showInfoFrame(int index) {
         FrameInfo fi = new FrameInfo(fileList.get(index).getFile());
+        fi.setLogger(logger);
         fi.setVisible(true);
     }
 

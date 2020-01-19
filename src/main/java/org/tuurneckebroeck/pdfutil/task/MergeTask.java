@@ -57,7 +57,7 @@ public final class MergeTask extends Task {
             e.printStackTrace();
         }
 
-        getLogger().log(LogLevel.ERROR, getClass(), String.format("Status: %s %s performing callback to: %s", getStatus(), "          ",getCallbackHandler().getClass().getSimpleName()));
+        getLogger().log(LogLevel.DEBUG, getClass(), String.format("Status: %s %s performing callback to: %s", getStatus(), "          ",getCallbackHandler().getClass().getSimpleName()));
         callback();
     }
 

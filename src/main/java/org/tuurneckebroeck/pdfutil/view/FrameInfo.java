@@ -12,6 +12,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.tuurneckebroeck.pdfutil.controller.PrintController;
+import org.tuurneckebroeck.pdfutil.log.NullLogger;
+import org.tuurneckebroeck.pdfutil.log.VerbosityLogger;
 
 import javax.swing.*;
 
@@ -62,6 +64,7 @@ public class FrameInfo extends javax.swing.JFrame {
 
     private void btnPrintClicked(ActionEvent e) {
         PrintController controller = new PrintController();
+        controller.setLogger(this.logger);
         controller.printPdf(this.file);
     }
 
@@ -161,4 +164,10 @@ public class FrameInfo extends javax.swing.JFrame {
             return sb.toString();
         }
     }
+
+    public void setLogger(VerbosityLogger logger) {
+        this.logger = logger;
+    }
+
+    private VerbosityLogger logger = NullLogger.instance();
 }

@@ -65,7 +65,7 @@ public class SplitController {
         }
     }
 
-    private VerbosityLogger logger = new NullLogger();
+    private VerbosityLogger logger =NullLogger.instance();
     private FrameSplit view;
     private File inputFile;
 }

@@ -41,7 +41,7 @@ public abstract class Task implements Runnable {
 
     //private int taskId = -1;
     private TaskCallbackHandler parent;
-    private VerbosityLogger logger = new NullLogger();
+    private VerbosityLogger logger = NullLogger.instance();
     private volatile TaskStatus status = TaskStatus.NOT_STARTED; // TODO moet dit volatile zijn?
 
     public enum TaskStatus {

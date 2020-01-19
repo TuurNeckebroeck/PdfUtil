@@ -86,7 +86,7 @@ public final class Constant {
     }
 
 
-    private VerbosityLogger logger = new NullLogger();
+    private VerbosityLogger logger = NullLogger.instance();
     private static Constant instance = null;
 
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");

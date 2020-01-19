@@ -4,18 +4,17 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.printing.PDFPageable;
+import org.tuurneckebroeck.pdfutil.log.LogLevel;
 import org.tuurneckebroeck.pdfutil.task.lib.Task;
 import org.tuurneckebroeck.pdfutil.task.lib.TaskCallbackHandler;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class RectoVersoPrintTask extends Task {
 
@@ -45,6 +44,7 @@ public class RectoVersoPrintTask extends Task {
     @Override
     public void run() {
         setStatus(TaskStatus.EXECUTING);
+        getLogger().log(LogLevel.DEBUG, getClass(), "Status: " + getStatus());
         try {
             PDDocument doc = PDDocument.load(file);
             PDDocument oddPagesDoc = composeOddPagesDoc(doc),
@@ -66,7 +66,6 @@ public class RectoVersoPrintTask extends Task {
             if(result == JOptionPane.OK_OPTION) {
                 // WAIT FOR PRINTING - DIALOG OK
 
-
                 printerJob = PrinterJob.getPrinterJob();
                 if(!useDefaultPrinter) {
                     printerJob.setPrintService(selectedPrinterService);
@@ -78,18 +77,19 @@ public class RectoVersoPrintTask extends Task {
                 printerJob.print();
                 evenPagesDoc.close();
             } else {
-                setStatus(TaskStatus.PARTIALLY_FAILED);
+                getLogger().log(LogLevel.WARNING, getClass(), String.format("Print task canceled via dialog."));
             }
 
             doc.close();
             setStatus(TaskStatus.FINISHED);
-            callback();
         } catch (IOException | PrinterException e) {
-            // TODO logger initialiseren
             setStatus(TaskStatus.FAILED);
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+//            e.printStackTrace();
+            getLogger().log(LogLevel.ERROR, getClass(), String.format("Exception occurred during run: %s", e.getMessage()));
         }
+
+        getLogger().log(LogLevel.DEBUG, getClass(), String.format("Status: %s %s performing callback to: %s", getStatus(), "          ", getCallbackHandler().getClass().getSimpleName()));
+        callback();
     }
 
     private PDDocument composeEvenPagesDoc(PDDocument sourceDoc) {

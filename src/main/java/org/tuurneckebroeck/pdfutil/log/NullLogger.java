@@ -1,6 +1,8 @@
 package org.tuurneckebroeck.pdfutil.log;
 
 
+import org.tuurneckebroeck.pdfutil.Constant;
+
 /**
  *  Proxy for uninitialised VerbosityLogger objects.
  *
@@ -9,7 +11,15 @@ package org.tuurneckebroeck.pdfutil.log;
  */
 public class NullLogger extends VerbosityLogger {
 
-    public NullLogger() {
+    public static NullLogger instance() {
+        if(instance == null) {
+            instance = new NullLogger();
+        }
+
+        return instance;
+    }
+
+    private NullLogger() {
         super(LogLevel.NONE);
     }
 
@@ -18,4 +28,6 @@ public class NullLogger extends VerbosityLogger {
 
     @Override
     public void tearDown() {}
+
+    private static NullLogger instance;
 }
